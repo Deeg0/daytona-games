@@ -5,40 +5,45 @@
   const COLORS = ["y", "g", "b", "p"];
   const EMOJI = { y: "🟨", g: "🟩", b: "🟦", p: "🟪" };
   const N = PUZZLES.length;
-  const keyFor = (i) => `connections:v1:${i}`;
-  const isDone = (i) => { try { return !!JSON.parse(localStorage.getItem(keyFor(i)) || "null")?.done; } catch { return false; } };
-  const doneCount = () => { let n = 0; for (let i = 0; i < N; i++) if (isDone(i)) n++; return n; };
+  const shuffle = (a) => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const lsGet = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k) || "null"); return v == null ? d : v; } catch { return d; } };
+  const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* ignore */ } };
 
   // ---------- which puzzle ----------
-  // Unlimited play: ?p=N opens a specific puzzle, otherwise the first one you
-  // haven't finished. When every puzzle is done, pick any at random.
-  const params = new URLSearchParams(location.search);
-  let idx = params.has("p") ? Number(params.get("p")) : -1;
-  if (!Number.isInteger(idx) || idx < 0 || idx >= N) {
-    idx = -1;
-    for (let i = 0; i < N; i++) if (!isDone(i)) { idx = i; break; }
-    if (idx < 0) idx = Math.floor(Math.random() * N);
+  // Endless: every player gets their own shuffled sequence through the bank.
+  // When the sequence runs out it's reshuffled and appended, so the puzzle
+  // number just keeps climbing. Progress is stored per position, not per
+  // puzzle, so a repeat much later starts fresh.
+  let seq = lsGet("connections:seq", null);
+  if (!Array.isArray(seq) || seq.length === 0) { seq = shuffle([...Array(N).keys()]); lsSet("connections:seq", seq); }
+  let cursor = Number(lsGet("connections:cursor", 0)) || 0;
+  while (cursor >= seq.length) {
+    const more = shuffle([...Array(N).keys()]);
+    // don't repeat the puzzle you literally just played
+    if (N > 1 && more[0] === seq[seq.length - 1]) [more[0], more[1]] = [more[1], more[0]];
+    seq = seq.concat(more); lsSet("connections:seq", seq);
   }
-  const nextUnfinished = () => {
-    for (let k = 1; k <= N; k++) { const i = (idx + k) % N; if (!isDone(i)) return i; }
-    let r = idx; while (r === idx && N > 1) r = Math.floor(Math.random() * N); return r;
-  };
+  const params = new URLSearchParams(location.search);
+  const debugIdx = params.has("p") ? Number(params.get("p")) : NaN;
+  const isDebug = Number.isInteger(debugIdx) && debugIdx >= 0 && debugIdx < N;
+  const idx = isDebug ? debugIdx : seq[cursor];
+  const number = cursor + 1;                       // what the player sees
   const puzzle = PUZZLES[idx];
-  const KEY = keyFor(idx);
+  const KEY = isDebug ? `connections:dbg:${idx}` : `connections:v2:${cursor}`;
+  const solvedCount = () => Number(lsGet("connections:solved", 0)) || 0;
+  const advance = () => { if (!isDebug) lsSet("connections:cursor", cursor + 1); location.href = location.pathname; };
 
   // ---------- state ----------
   const st = { selected: [], solved: [], attempts: [], mistakes: 0, done: false, order: [] };
   const words = puzzle.flatMap(([, ws], gi) => ws.map((w) => ({ w, gi })));
   const groupOf = (w) => words.find((x) => x.w === w).gi;
 
-  const shuffle = (a) => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
-
-  function save() { try { localStorage.setItem(KEY, JSON.stringify({ solved: st.solved, attempts: st.attempts, mistakes: st.mistakes, done: st.done, order: st.order })); } catch { /* ignore */ } }
+  function save() { lsSet(KEY, { solved: st.solved, attempts: st.attempts, mistakes: st.mistakes, done: st.done, order: st.order, counted: !!st.counted }); }
   function load() {
     try {
       const s = JSON.parse(localStorage.getItem(KEY) || "null");
       if (!s) return false;
-      Object.assign(st, { solved: s.solved || [], attempts: s.attempts || [], mistakes: s.mistakes || 0, done: !!s.done, order: s.order || [] });
+      Object.assign(st, { solved: s.solved || [], attempts: s.attempts || [], mistakes: s.mistakes || 0, done: !!s.done, order: s.order || [], counted: !!s.counted });
       return true;
     } catch { return false; }
   }
@@ -149,6 +154,7 @@
   async function finish(won) {
     st.done = true;
     updateButtons();
+    if (won && !st.counted) { st.counted = true; lsSet("connections:solved", solvedCount() + 1); }
     if (!won) {
       toast("Next time!", 1400);
       // reveal the rest, one group at a time
@@ -168,13 +174,13 @@
     const m = st.mistakes;
     const title = !won ? "Next Time!" : m === 0 ? "Perfect!" : m === 1 ? "Great!" : m === 2 ? "Solid!" : "Phew!";
     $("#result-title").textContent = title;
-    $("#result-sub").textContent = `Puzzle ${idx + 1} · ${won ? `${m} mistake${m === 1 ? "" : "s"}` : "out of mistakes"} · ${doneCount()} of ${N} done`;
+    $("#result-sub").textContent = `Puzzle #${number} · ${won ? `${m} mistake${m === 1 ? "" : "s"}` : "out of mistakes"} · ${solvedCount()} solved`;
     $("#result-grid").innerHTML = st.attempts.map((a) => `<div>${a.map((c) => EMOJI[c]).join("")}</div>`).join("");
     $("#modal").classList.remove("hidden");
   }
 
   function shareText() {
-    const head = `Daytona Connections · Puzzle ${idx + 1}`;
+    const head = `Daytona Connections #${number}`;
     return `${head}\n${st.attempts.map((a) => a.map((c) => EMOJI[c]).join("")).join("\n")}`;
   }
 
@@ -194,12 +200,17 @@
       else { await navigator.clipboard.writeText(text); toast("Copied to clipboard"); }
     } catch { /* cancelled */ }
   };
-  $("#btn-another").onclick = () => { location.href = `?p=${nextUnfinished()}`; };
-  $("#btn-skip").onclick = () => { location.href = `?p=${nextUnfinished()}`; };
-  $("#btn-random").onclick = () => { let r = idx; while (r === idx && N > 1) r = Math.floor(Math.random() * N); location.href = `?p=${r}`; };
+  $("#btn-another").onclick = advance;
+  $("#btn-skip").onclick = advance;
+  $("#btn-random").onclick = () => {
+    // swap a different random puzzle into this slot and start it fresh
+    let r = idx; while (r === idx && N > 1) r = Math.floor(Math.random() * N);
+    if (!isDebug) { seq[cursor] = r; lsSet("connections:seq", seq); try { localStorage.removeItem(KEY); } catch { /* ignore */ } }
+    location.href = location.pathname;
+  };
 
   // ---------- boot ----------
-  $("#puzzle-label").textContent = `Puzzle ${idx + 1} of ${N} · ${doneCount()} done`;
+  $("#puzzle-label").textContent = `Puzzle #${number}${solvedCount() ? ` · ${solvedCount()} solved` : ""}`;
   if (!load() || st.order.length !== 16) { st.order = shuffle(words.map((x) => x.w)); save(); }
   renderSolved(); renderGrid(); renderDots();
   if (st.done) showResults(st.solved.length === 4 && st.mistakes < 4);

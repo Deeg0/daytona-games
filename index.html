@@ -116,7 +116,7 @@
         <div class="body">
           <span class="kicker">Word puzzle</span>
           <h2>Connections</h2>
-          <p>Sixteen words, four hidden groups, four mistakes. Unlimited puzzles.</p>
+          <p>Sixteen words, four hidden groups, four mistakes. Endless puzzles.</p>
           <div class="foot"><span class="stat" id="conn-stat"></span><span class="play">Play →</span></div>
         </div>
       </a>
@@ -128,7 +128,7 @@
     try {
       const best = Number(localStorage.getItem("flappy:best") || 0);
       if (best > 0) { document.getElementById("flappy-stat").innerHTML = `Best <b>${best}</b>`; document.getElementById("flappy-score").textContent = best; }
-      let done = 0; for (let i = 0; i < 500; i++) { const v = localStorage.getItem(`connections:v1:${i}`); if (v && JSON.parse(v).done) done++; }
+      const done = Number(JSON.parse(localStorage.getItem("connections:solved") || "0")) || 0;
       if (done > 0) document.getElementById("conn-stat").innerHTML = `<b>${done}</b> solved`;
     } catch (e) { /* storage blocked */ }
   </script>
