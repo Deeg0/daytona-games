@@ -1,4 +1,4 @@
-# Daytona Games
+# Daytona
 
 Static site, no build. Open `index.html`.
 
