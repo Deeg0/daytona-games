@@ -60,6 +60,10 @@ main { max-width: 640px; margin: 0 auto; padding: 22px 12px 40px; }
 .pill.primary:not(:disabled) { background: var(--text); color: #fff; }
 .pill:not(:disabled):active { transform: scale(0.97); }
 
+.secondary { display: flex; justify-content: center; gap: 10px; margin-top: 16px; color: var(--muted); font-size: 13px; }
+.link { border: 0; background: none; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; font-size: 13px; padding: 0; }
+.link:hover { color: var(--text); }
+
 .toast {
   position: fixed; left: 50%; top: 92px; transform: translateX(-50%);
   background: #121212; color: #fff; padding: 10px 16px; border-radius: 6px; font-weight: 600; font-size: 15px;

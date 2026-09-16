@@ -4,16 +4,27 @@
   const $ = (s) => document.querySelector(s);
   const COLORS = ["y", "g", "b", "p"];
   const EMOJI = { y: "🟨", g: "🟩", b: "🟦", p: "🟪" };
-  const EPOCH = Date.UTC(2026, 8, 16); // puzzle #1
+  const N = PUZZLES.length;
+  const keyFor = (i) => `connections:v1:${i}`;
+  const isDone = (i) => { try { return !!JSON.parse(localStorage.getItem(keyFor(i)) || "null")?.done; } catch { return false; } };
+  const doneCount = () => { let n = 0; for (let i = 0; i < N; i++) if (isDone(i)) n++; return n; };
 
   // ---------- which puzzle ----------
-  const dayIndex = Math.floor((Date.now() - EPOCH) / 86400000);
+  // Unlimited play: ?p=N opens a specific puzzle, otherwise the first one you
+  // haven't finished. When every puzzle is done, pick any at random.
   const params = new URLSearchParams(location.search);
-  let idx = params.has("p") ? Number(params.get("p")) : ((dayIndex % PUZZLES.length) + PUZZLES.length) % PUZZLES.length;
-  if (!Number.isInteger(idx) || idx < 0 || idx >= PUZZLES.length) idx = 0;
+  let idx = params.has("p") ? Number(params.get("p")) : -1;
+  if (!Number.isInteger(idx) || idx < 0 || idx >= N) {
+    idx = -1;
+    for (let i = 0; i < N; i++) if (!isDone(i)) { idx = i; break; }
+    if (idx < 0) idx = Math.floor(Math.random() * N);
+  }
+  const nextUnfinished = () => {
+    for (let k = 1; k <= N; k++) { const i = (idx + k) % N; if (!isDone(i)) return i; }
+    let r = idx; while (r === idx && N > 1) r = Math.floor(Math.random() * N); return r;
+  };
   const puzzle = PUZZLES[idx];
-  const isDaily = !params.has("p");
-  const KEY = `connections:v1:${idx}`;
+  const KEY = keyFor(idx);
 
   // ---------- state ----------
   const st = { selected: [], solved: [], attempts: [], mistakes: 0, done: false, order: [] };
@@ -157,13 +168,13 @@
     const m = st.mistakes;
     const title = !won ? "Next Time!" : m === 0 ? "Perfect!" : m === 1 ? "Great!" : m === 2 ? "Solid!" : "Phew!";
     $("#result-title").textContent = title;
-    $("#result-sub").textContent = `${isDaily ? `Connections #${dayIndex + 1}` : `Puzzle ${idx + 1}`} · ${won ? `${m} mistake${m === 1 ? "" : "s"}` : "out of mistakes"}`;
+    $("#result-sub").textContent = `Puzzle ${idx + 1} · ${won ? `${m} mistake${m === 1 ? "" : "s"}` : "out of mistakes"} · ${doneCount()} of ${N} done`;
     $("#result-grid").innerHTML = st.attempts.map((a) => `<div>${a.map((c) => EMOJI[c]).join("")}</div>`).join("");
     $("#modal").classList.remove("hidden");
   }
 
   function shareText() {
-    const head = isDaily ? `Daytona Connections #${dayIndex + 1}` : `Daytona Connections · Puzzle ${idx + 1}`;
+    const head = `Daytona Connections · Puzzle ${idx + 1}`;
     return `${head}\n${st.attempts.map((a) => a.map((c) => EMOJI[c]).join("")).join("\n")}`;
   }
 
@@ -183,15 +194,12 @@
       else { await navigator.clipboard.writeText(text); toast("Copied to clipboard"); }
     } catch { /* cancelled */ }
   };
-  $("#btn-another").onclick = () => {
-    let next = idx; while (next === idx && PUZZLES.length > 1) next = Math.floor(Math.random() * PUZZLES.length);
-    location.href = `?p=${next}`;
-  };
+  $("#btn-another").onclick = () => { location.href = `?p=${nextUnfinished()}`; };
+  $("#btn-skip").onclick = () => { location.href = `?p=${nextUnfinished()}`; };
+  $("#btn-random").onclick = () => { let r = idx; while (r === idx && N > 1) r = Math.floor(Math.random() * N); location.href = `?p=${r}`; };
 
   // ---------- boot ----------
-  $("#puzzle-label").textContent = isDaily
-    ? `#${dayIndex + 1} · ${new Date().toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })}`
-    : `Puzzle ${idx + 1} of ${PUZZLES.length}`;
+  $("#puzzle-label").textContent = `Puzzle ${idx + 1} of ${N} · ${doneCount()} done`;
   if (!load() || st.order.length !== 16) { st.order = shuffle(words.map((x) => x.w)); save(); }
   renderSolved(); renderGrid(); renderDots();
   if (st.done) showResults(st.solved.length === 4 && st.mistakes < 4);

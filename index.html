@@ -4,77 +4,140 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Daytona Games</title>
-  <meta name="theme-color" content="#0b0e13" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%235aa9ff'/%3E%3Ctext x='32' y='44' font-size='36' font-family='sans-serif' font-weight='800' text-anchor='middle' fill='%23071019'%3ED%3C/text%3E%3C/svg%3E" />
+  <meta name="theme-color" content="#0a0c12" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2360a5fa'/%3E%3Cstop offset='1' stop-color='%23a78bfa'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&display=swap" rel="stylesheet" />
   <style>
-    :root { --bg: #0b0e13; --panel: #12161d; --line: rgba(255,255,255,0.08); --text: #e8eaee; --muted: #8b93a1; --accent: #5aa9ff; }
+    :root { --bg: #0a0c12; --panel: #10131b; --line: rgba(255,255,255,0.07); --text: #eef0f5; --muted: #8d95a5; --a1: #60a5fa; --a2: #a78bfa; --a3: #34d399; }
     * { box-sizing: border-box; }
-    html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--text); font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
-    body { background: radial-gradient(900px 500px at 50% -10%, rgba(90,169,255,0.18), transparent 70%), var(--bg); }
-    header { max-width: 980px; margin: 0 auto; padding: 56px 24px 20px; text-align: center; }
-    .logo { display: inline-flex; align-items: center; gap: 12px; }
-    .logo .mark { width: 44px; height: 44px; border-radius: 12px; background: var(--accent); color: #071019; display: grid; place-items: center; font-weight: 900; font-size: 24px; letter-spacing: -0.04em; }
-    h1 { margin: 0; font-size: 40px; letter-spacing: -0.03em; }
-    .tag { margin: 8px 0 0; color: var(--muted); }
-    main { max-width: 980px; margin: 0 auto; padding: 16px 24px 80px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
-    .card { display: flex; flex-direction: column; background: var(--panel); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; text-decoration: none; color: inherit; transition: transform 0.15s ease, border-color 0.15s ease; }
-    .card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.2); }
-    .art { height: 170px; display: grid; place-items: center; position: relative; overflow: hidden; }
-    .body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
-    .body h2 { margin: 0; font-size: 20px; letter-spacing: -0.01em; }
-    .body p { margin: 0; color: var(--muted); font-size: 14px; }
-    .play { margin-top: auto; padding-top: 12px; color: var(--accent); font-weight: 700; font-size: 14px; }
-    /* flappy art */
-    .art.flappy { background: linear-gradient(#4ec0ca, #70c5ce 70%, #ded895 70%, #ded895); }
-    .art.flappy .pipe { position: absolute; width: 34px; background: #73bf2e; border: 2px solid #543847; }
-    .art.flappy .bird { width: 36px; height: 26px; background: #f8d548; border: 2px solid #543847; border-radius: 50%; position: relative; transform: rotate(-10deg); animation: bob 1.2s ease-in-out infinite; }
-    .art.flappy .bird::before { content: ""; position: absolute; right: 4px; top: 3px; width: 10px; height: 10px; background: #fff; border: 2px solid #543847; border-radius: 50%; }
-    .art.flappy .bird::after { content: ""; position: absolute; right: -10px; top: 12px; border-left: 12px solid #f0552d; border-top: 5px solid transparent; border-bottom: 5px solid transparent; }
-    @keyframes bob { 0%,100% { transform: translateY(-4px) rotate(-10deg);} 50% { transform: translateY(4px) rotate(4deg);} }
-    /* connections art */
-    .art.connections { background: #1a1d24; }
-    .art.connections .grid { display: grid; grid-template-columns: repeat(4, 44px); gap: 6px; }
-    .art.connections .grid i { display: block; height: 30px; border-radius: 6px; background: #efefe6; }
-    .art.connections .grid i.y { background: #f9df6d; } .art.connections .grid i.g { background: #a0c35a; } .art.connections .grid i.b { background: #b0c4ef; } .art.connections .grid i.p { background: #ba81c5; }
-    footer { text-align: center; color: var(--muted); font-size: 12px; padding: 0 24px 40px; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      background: var(--bg); color: var(--text);
+      font: 16px/1.5 "Sora", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased;
+      background-image:
+        radial-gradient(800px 420px at 20% -10%, rgba(96,165,250,0.16), transparent 60%),
+        radial-gradient(700px 400px at 90% 0%, rgba(167,139,250,0.14), transparent 60%),
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: auto, auto, 32px 32px, 32px 32px;
+    }
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+    nav { display: flex; align-items: center; justify-content: space-between; padding: 22px 0; }
+    .brand { font-weight: 800; letter-spacing: -0.02em; font-size: 18px; }
+    .brand span { background: linear-gradient(90deg, var(--a1), var(--a2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .count { color: var(--muted); font-size: 13px; }
+
+    .hero { padding: 48px 0 28px; }
+    .hero h1 { margin: 0; font-size: clamp(44px, 8vw, 84px); line-height: 0.98; letter-spacing: -0.045em; font-weight: 800; }
+    .hero h1 em { font-style: normal; background: linear-gradient(90deg, var(--a1) 0%, var(--a2) 55%, var(--a3) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero p { margin: 18px 0 0; color: var(--muted); font-size: 18px; max-width: 46ch; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 16px 0 90px; }
+    .card {
+      position: relative; display: flex; flex-direction: column; text-decoration: none; color: inherit;
+      background: var(--panel); border: 1px solid var(--line); border-radius: 26px; overflow: hidden;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+    .card::after { content: ""; position: absolute; inset: 0; border-radius: 26px; pointer-events: none; box-shadow: 0 0 0 1px rgba(255,255,255,0) inset; transition: box-shadow 0.18s ease; }
+    .card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.16); box-shadow: 0 30px 60px -30px rgba(96,165,250,0.45); }
+    .art { height: 210px; position: relative; overflow: hidden; }
+    .body { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+    .kicker { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+    .body h2 { margin: 0; font-size: 24px; letter-spacing: -0.02em; }
+    .body p { margin: 0; color: var(--muted); font-size: 14.5px; }
+    .foot { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 16px; }
+    .stat { color: var(--muted); font-size: 13px; }
+    .stat b { color: var(--text); }
+    .play { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 99px; background: var(--text); color: #0a0c12; font-weight: 700; font-size: 14px; transition: transform 0.15s ease; }
+    .card:hover .play { transform: translateX(3px); }
+
+    /* ---- Flappy art ---- */
+    .art.flappy { background: linear-gradient(#4ec0ca 0%, #70c5ce 66%, #ded895 66%, #ded895 72%, #73bf2e 72%, #73bf2e 76%, #ded895 76%); }
+    .flappy .cloud { position: absolute; background: #dff5e6; border-radius: 99px; opacity: 0.9; }
+    .flappy .pipe { position: absolute; width: 40px; background: linear-gradient(90deg, #9be15d 0 8px, #73bf2e 8px 30px, #558022 30px); border: 2px solid #543847; }
+    .flappy .pipe::after { content: ""; position: absolute; left: -5px; right: -5px; height: 18px; background: inherit; border: 2px solid #543847; }
+    .flappy .pipe.top::after { bottom: -2px; } .flappy .pipe.bot::after { top: -2px; }
+    .flappy .bird { position: absolute; left: 44%; top: 42%; width: 40px; height: 28px; background: #f8d548; border: 2px solid #543847; border-radius: 50% 50% 50% 50%; animation: bob 1.1s ease-in-out infinite; }
+    .flappy .bird::before { content: ""; position: absolute; right: 5px; top: 3px; width: 11px; height: 11px; background: #fff; border: 2px solid #543847; border-radius: 50%; box-shadow: inset -3px 0 0 #543847; }
+    .flappy .bird::after { content: ""; position: absolute; right: -12px; top: 13px; border-left: 13px solid #f0552d; border-top: 5px solid transparent; border-bottom: 5px solid transparent; }
+    .flappy .wing { position: absolute; left: 4px; top: 10px; width: 16px; height: 9px; background: #f5c132; border: 2px solid #543847; border-radius: 50%; animation: flap 0.3s ease-in-out infinite alternate; }
+    @keyframes bob { 0%,100% { transform: translateY(-5px) rotate(-12deg);} 50% { transform: translateY(5px) rotate(6deg);} }
+    @keyframes flap { from { transform: translateY(-3px) rotate(-15deg);} to { transform: translateY(3px) rotate(15deg);} }
+    .flappy .score { position: absolute; left: 50%; top: 14px; transform: translateX(-50%); color: #fff; font-weight: 800; font-size: 28px; text-shadow: 2px 2px 0 #543847, -1px -1px 0 #543847, 1px -1px 0 #543847, -1px 1px 0 #543847; }
+
+    /* ---- Connections art ---- */
+    .art.connections { background: #f7f5ee; display: grid; place-items: center; }
+    .connections .board { display: grid; grid-template-columns: repeat(4, 62px); gap: 6px; }
+    .connections .board i { display: grid; place-items: center; height: 36px; border-radius: 6px; background: #efefe6; color: #121212; font-size: 9px; font-weight: 800; letter-spacing: 0.02em; font-family: -apple-system, system-ui, sans-serif; }
+    .connections .board .bar { grid-column: 1 / -1; height: 36px; border-radius: 6px; display: grid; place-items: center; font-size: 10px; font-weight: 800; letter-spacing: 0.06em; color: #121212; font-family: -apple-system, system-ui, sans-serif; }
+    .connections .y { background: #f9df6d; } .connections .g { background: #a0c35a; }
+    .connections .board i.sel { background: #5a594e; color: #fff; }
+
+    footer { color: var(--muted); font-size: 13px; padding: 0 0 40px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+    @media (max-width: 520px) { .art { height: 180px; } .hero { padding-top: 28px; } }
   </style>
 </head>
 <body>
-  <header>
-    <div class="logo"><span class="mark">D</span><h1>Daytona Games</h1></div>
-    <p class="tag">Pick a game.</p>
-  </header>
-  <main>
-    <a class="card" href="games/flappy/index.html">
-      <div class="art flappy">
-        <div class="pipe" style="left: 40px; top: 0; height: 60px;"></div>
-        <div class="pipe" style="left: 40px; bottom: 30%; height: 30px;"></div>
-        <div class="pipe" style="right: 60px; top: 0; height: 30px;"></div>
-        <div class="pipe" style="right: 60px; bottom: 30%; height: 60px;"></div>
-        <div class="bird"></div>
-      </div>
-      <div class="body">
-        <h2>Flappy Bird</h2>
-        <p>Tap to flap. Don't hit the pipes. Medals at 10, 20, 30 and 40.</p>
-        <span class="play">Play →</span>
-      </div>
-    </a>
-    <a class="card" href="games/connections/index.html">
-      <div class="art connections">
-        <div class="grid">
-          <i class="y"></i><i class="y"></i><i class="y"></i><i class="y"></i>
-          <i class="g"></i><i class="g"></i><i class="g"></i><i class="g"></i>
-          <i></i><i></i><i></i><i></i>
-          <i></i><i></i><i></i><i></i>
+  <div class="wrap">
+    <nav>
+      <div class="brand">Daytona <span>Games</span></div>
+      <div class="count" id="count">2 games</div>
+    </nav>
+
+    <section class="hero">
+      <h1>Play <em>something</em><br />right now.</h1>
+      <p>Free browser games. No accounts, no downloads, no ads. Your scores save on your device.</p>
+    </section>
+
+    <section class="grid">
+      <a class="card" href="games/flappy/index.html">
+        <div class="art flappy">
+          <span class="cloud" style="left: 12%; top: 18%; width: 70px; height: 22px;"></span>
+          <span class="cloud" style="left: 62%; top: 30%; width: 90px; height: 26px;"></span>
+          <div class="pipe top" style="left: 18%; top: -2px; height: 70px;"></div>
+          <div class="pipe bot" style="left: 18%; bottom: 28%; height: 40px;"></div>
+          <div class="pipe top" style="right: 14%; top: -2px; height: 36px;"></div>
+          <div class="pipe bot" style="right: 14%; bottom: 28%; height: 74px;"></div>
+          <div class="bird"><span class="wing"></span></div>
+          <div class="score" id="flappy-score">12</div>
         </div>
-      </div>
-      <div class="body">
-        <h2>Connections</h2>
-        <p>Sixteen words, four hidden groups. Four mistakes and you're out. A new puzzle every day.</p>
-        <span class="play">Play →</span>
-      </div>
-    </a>
-  </main>
-  <footer>Daytona Games</footer>
+        <div class="body">
+          <span class="kicker">Arcade</span>
+          <h2>Flappy Bird</h2>
+          <p>Tap to flap, thread the pipes, don't blink. Medals at 10, 20, 30 and 40.</p>
+          <div class="foot"><span class="stat" id="flappy-stat"></span><span class="play">Play →</span></div>
+        </div>
+      </a>
+
+      <a class="card" href="games/connections/index.html">
+        <div class="art connections">
+          <div class="board">
+            <span class="bar y">FRUITS</span>
+            <span class="bar g">CHESS PIECES</span>
+            <i>SNOW</i><i class="sel">THAMES</i><i>FOOT</i><i class="sel">NILE</i>
+            <i class="sel">SEINE</i><i>EYE</i><i class="sel">DANUBE</i><i>BASKET</i>
+          </div>
+        </div>
+        <div class="body">
+          <span class="kicker">Word puzzle</span>
+          <h2>Connections</h2>
+          <p>Sixteen words, four hidden groups, four mistakes. Unlimited puzzles.</p>
+          <div class="foot"><span class="stat" id="conn-stat"></span><span class="play">Play →</span></div>
+        </div>
+      </a>
+    </section>
+
+    <footer><span>Daytona Games</span><span>Made for fun.</span></footer>
+  </div>
+  <script>
+    // Personal stats from the games' own saves (same origin).
+    try {
+      const best = Number(localStorage.getItem("flappy:best") || 0);
+      if (best > 0) { document.getElementById("flappy-stat").innerHTML = `Best <b>${best}</b>`; document.getElementById("flappy-score").textContent = best; }
+      let done = 0; for (let i = 0; i < 500; i++) { const v = localStorage.getItem(`connections:v1:${i}`); if (v && JSON.parse(v).done) done++; }
+      if (done > 0) document.getElementById("conn-stat").innerHTML = `<b>${done}</b> solved`;
+    } catch (e) { /* storage blocked */ }
+  </script>
 </body>
 </html>
