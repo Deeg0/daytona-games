@@ -82,7 +82,7 @@
     birdY: 0, birdV: 0, birdRot: 0, wing: 0, wingT: 0,
     pipes: [],       // { x, top, scored }
     groundX: 0, bgX: 0,
-    score: 0, best: Number(localStorage.getItem(BEST_KEY) || 0),
+    score: 0, best: (() => { try { return Number(localStorage.getItem(BEST_KEY) || 0); } catch { return 0; } })(),
     flash: 0, panelT: 0, deadT: 0, newBest: false,
     t: 0, readyBob: 0,
     shake: 0,
@@ -125,7 +125,7 @@
     g.flash = 1; g.shake = 1; g.deadT = 0; g.panelT = 0;
     sfx.hit();
     if (navigator.vibrate) navigator.vibrate(60);
-    if (g.score > g.best) { g.best = g.score; g.newBest = true; localStorage.setItem(BEST_KEY, String(g.best)); }
+    if (g.score > g.best) { g.best = g.score; g.newBest = true; try { localStorage.setItem(BEST_KEY, String(g.best)); } catch { /* storage blocked */ } }
   }
 
   // ---------- update ----------

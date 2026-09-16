@@ -1,0 +1,1705 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>Daytona Games</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&family=Press+Start+2P&display=swap" rel="stylesheet" />
+<style>
+html, body { margin: 0; min-height: 100%; }
+body.is-menu { background: #0a0c12; }
+body.is-flappy { background: #000; overflow: hidden; touch-action: none; }
+body.is-connections { background: #fff; }
+[hidden] { display: none !important; }
+/* ---- menu ---- */
+#view-menu { --bg: #0a0c12; --panel: #10131b; --line: rgba(255,255,255,0.07); --text: #eef0f5; --muted: #8d95a5; --a1: #60a5fa; --a2: #a78bfa; --a3: #34d399; }
+#view-menu * { box-sizing: border-box; }
+#view-menu, #view-menu { margin: 0; min-height: 100%; }
+#view-menu {
+      background: var(--bg); color: var(--text);
+      font: 16px/1.5 "Sora", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased;
+      background-image:
+        radial-gradient(800px 420px at 20% -10%, rgba(96,165,250,0.16), transparent 60%),
+        radial-gradient(700px 400px at 90% 0%, rgba(167,139,250,0.14), transparent 60%),
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: auto, auto, 32px 32px, 32px 32px;
+    }
+#view-menu .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+#view-menu nav { display: flex; align-items: center; justify-content: space-between; padding: 22px 0; }
+#view-menu .brand { font-weight: 800; letter-spacing: -0.02em; font-size: 18px; }
+#view-menu .brand span { background: linear-gradient(90deg, var(--a1), var(--a2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+#view-menu .count { color: var(--muted); font-size: 13px; }
+#view-menu .hero { padding: 72px 0 36px; text-align: center; }
+#view-menu .hero h1 { margin: 0; font-size: clamp(46px, 9vw, 92px); line-height: 1; letter-spacing: -0.045em; font-weight: 800; }
+#view-menu .hero h1 em { font-style: normal; background: linear-gradient(90deg, var(--a1) 0%, var(--a2) 55%, var(--a3) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+#view-menu .hero p { margin: 18px 0 0; color: var(--muted); font-size: 18px; max-width: 46ch; }
+#view-menu .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 16px 0 90px; max-width: 860px; margin: 0 auto; }
+#view-menu .card {
+      position: relative; display: flex; flex-direction: column; text-decoration: none; color: inherit;
+      background: var(--panel); border: 1px solid var(--line); border-radius: 26px; overflow: hidden;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+#view-menu .card::after { content: ""; position: absolute; inset: 0; border-radius: 26px; pointer-events: none; box-shadow: 0 0 0 1px rgba(255,255,255,0) inset; transition: box-shadow 0.18s ease; }
+#view-menu .card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.16); box-shadow: 0 30px 60px -30px rgba(96,165,250,0.45); }
+#view-menu .art { height: 210px; position: relative; overflow: hidden; }
+#view-menu .body { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+#view-menu .kicker { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+#view-menu .body h2 { margin: 0; font-size: 24px; letter-spacing: -0.02em; }
+#view-menu .body p { margin: 0; color: var(--muted); font-size: 14.5px; }
+#view-menu .foot { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 16px; }
+#view-menu .stat { color: var(--muted); font-size: 13px; }
+#view-menu .stat b { color: var(--text); }
+#view-menu .play { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 99px; background: var(--text); color: #0a0c12; font-weight: 700; font-size: 14px; transition: transform 0.15s ease; }
+#view-menu .card:hover .play { transform: translateX(3px); }
+#view-menu /* ---- Flappy art ---- */
+    .art.flappy { background: linear-gradient(#4ec0ca 0%, #70c5ce 66%, #ded895 66%, #ded895 72%, #73bf2e 72%, #73bf2e 76%, #ded895 76%); }
+#view-menu .flappy .cloud { position: absolute; background: #dff5e6; border-radius: 99px; opacity: 0.9; }
+#view-menu .flappy .pipe { position: absolute; width: 40px; background: linear-gradient(90deg, #9be15d 0 8px, #73bf2e 8px 30px, #558022 30px); border: 2px solid #543847; }
+#view-menu .flappy .pipe::after { content: ""; position: absolute; left: -5px; right: -5px; height: 18px; background: inherit; border: 2px solid #543847; }
+#view-menu .flappy .pipe.top::after { bottom: -2px; }
+#view-menu .flappy .pipe.bot::after { top: -2px; }
+#view-menu .flappy .bird { position: absolute; left: 44%; top: 42%; width: 40px; height: 28px; background: #f8d548; border: 2px solid #543847; border-radius: 50% 50% 50% 50%; animation: bob 1.1s ease-in-out infinite; }
+#view-menu .flappy .bird::before { content: ""; position: absolute; right: 5px; top: 3px; width: 11px; height: 11px; background: #fff; border: 2px solid #543847; border-radius: 50%; box-shadow: inset -3px 0 0 #543847; }
+#view-menu .flappy .bird::after { content: ""; position: absolute; right: -12px; top: 13px; border-left: 13px solid #f0552d; border-top: 5px solid transparent; border-bottom: 5px solid transparent; }
+#view-menu .flappy .wing { position: absolute; left: 4px; top: 10px; width: 16px; height: 9px; background: #f5c132; border: 2px solid #543847; border-radius: 50%; animation: flap 0.3s ease-in-out infinite alternate; }
+@keyframes bob { 0%,100% { transform: translateY(-5px) rotate(-12deg);} 50% { transform: translateY(5px) rotate(6deg);} }
+
+@keyframes flap { from { transform: translateY(-3px) rotate(-15deg);} to { transform: translateY(3px) rotate(15deg);} }
+#view-menu .flappy .score { position: absolute; left: 50%; top: 14px; transform: translateX(-50%); color: #fff; font-weight: 800; font-size: 28px; text-shadow: 2px 2px 0 #543847, -1px -1px 0 #543847, 1px -1px 0 #543847, -1px 1px 0 #543847; }
+#view-menu /* ---- Connections art ---- */
+    .art.connections { background: #f7f5ee; display: grid; place-items: center; }
+#view-menu .connections .board { display: grid; grid-template-columns: repeat(4, 62px); gap: 6px; }
+#view-menu .connections .board i { display: grid; place-items: center; height: 36px; border-radius: 6px; background: #efefe6; color: #121212; font-size: 9px; font-weight: 800; letter-spacing: 0.02em; font-family: -apple-system, system-ui, sans-serif; }
+#view-menu .connections .board .bar { grid-column: 1 / -1; height: 36px; border-radius: 6px; display: grid; place-items: center; font-size: 10px; font-weight: 800; letter-spacing: 0.06em; color: #121212; font-family: -apple-system, system-ui, sans-serif; }
+#view-menu .connections .y { background: #f9df6d; }
+#view-menu .connections .g { background: #a0c35a; }
+#view-menu .connections .board i.sel { background: #5a594e; color: #fff; }
+#view-menu footer { color: var(--muted); font-size: 13px; padding: 0 0 40px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+@media (max-width: 520px) {#view-menu .art { height: 180px; }
+#view-menu .hero { padding: 44px 0 24px; }}
+
+/* ---- flappy ---- */
+#view-flappy, #view-flappy { margin: 0; height: 100%; background: #000; overflow: hidden; touch-action: none; -webkit-user-select: none; user-select: none; }
+#view-flappy { display: flex; align-items: center; justify-content: center; }
+#view-flappy canvas { display: block; image-rendering: pixelated; image-rendering: crisp-edges; cursor: pointer; }
+#view-flappy .back { position: fixed; top: 10px; left: 10px; z-index: 5; color: #fff; text-decoration: none; font: 600 13px -apple-system, system-ui, sans-serif; background: rgba(0,0,0,0.45); padding: 7px 11px; border-radius: 99px; backdrop-filter: blur(6px); }
+#view-flappy .back:hover { background: rgba(0,0,0,0.65); }
+#view-flappy { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; }
+/* ---- connections ---- */
+#view-connections {
+  --bg: #ffffff;
+  --text: #121212;
+  --muted: #5f5f5f;
+  --tile: #efefe6;
+  --tile-selected: #5a594e;
+  --y: #f9df6d; --g: #a0c35a; --b: #b0c4ef; --p: #ba81c5;
+  --line: #dcdcdc;
+}
+#view-connections * { box-sizing: border-box; }
+#view-connections, #view-connections { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.4 -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
+#view-connections button { font: inherit; cursor: pointer; }
+#view-connections .top { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+#view-connections .back { color: var(--text); text-decoration: none; font-weight: 600; font-size: 14px; justify-self: start; }
+#view-connections .title { text-align: center; }
+#view-connections .title h1 { margin: 0; font-size: 26px; letter-spacing: -0.02em; font-family: Georgia, "Times New Roman", serif; }
+#view-connections .sub { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+#view-connections .icon { justify-self: end; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--text); background: transparent; font-weight: 700; }
+#view-connections main { max-width: 640px; margin: 0 auto; padding: 22px 12px 40px; }
+#view-connections .lede { text-align: center; margin: 0 0 18px; font-size: 17px; }
+#view-connections #board { display: flex; flex-direction: column; gap: 8px; }
+#view-connections #solved { display: flex; flex-direction: column; gap: 8px; }
+#view-connections #grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+#view-connections .tile {
+  height: 80px; border: 0; border-radius: 6px; background: var(--tile); color: var(--text);
+  font-weight: 700; text-transform: uppercase; font-size: clamp(11px, 2.6vw, 17px); line-height: 1.1;
+  padding: 4px 6px; word-break: break-word; overflow-wrap: anywhere;
+  transition: transform 0.08s ease, background 0.12s ease, color 0.12s ease, opacity 0.2s ease;
+  user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent;
+}
+#view-connections .tile:active { transform: scale(0.95); }
+#view-connections .tile.selected { background: var(--tile-selected); color: #fff; }
+#view-connections .tile.bounce { animation: bounce 0.32s ease; }
+#view-connections .tile.shake { animation: shake 0.4s ease; }
+#view-connections .tile.fade { opacity: 0; transform: scale(0.9); }
+@keyframes bounce { 0% { transform: translateY(0); } 40% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
+
+@keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+#view-connections .group {
+  height: 80px; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-transform: uppercase; animation: pop 0.35s ease; padding: 0 12px; text-align: center;
+}
+#view-connections .group b { font-weight: 800; font-size: 17px; letter-spacing: 0.01em; }
+#view-connections .group span { font-size: 15px; }
+#view-connections .group.y { background: var(--y); }
+#view-connections .group.g { background: var(--g); }
+#view-connections .group.b { background: var(--b); }
+#view-connections .group.p { background: var(--p); }
+@keyframes pop { 0% { transform: scale(0.94); opacity: 0.4; } 100% { transform: scale(1); opacity: 1; } }
+#view-connections .mistakes { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 26px 0 18px; font-size: 15px; }
+#view-connections .dots { display: inline-flex; gap: 10px; }
+#view-connections .dots i { width: 16px; height: 16px; border-radius: 50%; background: var(--tile-selected); display: block; transition: transform 0.25s ease, opacity 0.25s ease; }
+#view-connections .dots i.gone { transform: scale(0); opacity: 0; }
+#view-connections .actions { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+#view-connections .pill { padding: 12px 22px; border-radius: 99px; border: 1px solid var(--text); background: transparent; color: var(--text); font-weight: 600; font-size: 15px; }
+#view-connections .pill:disabled { border-color: #b5b5b5; color: #8f8f8f; cursor: default; }
+#view-connections .pill.primary:not(:disabled) { background: var(--text); color: #fff; }
+#view-connections .pill:not(:disabled):active { transform: scale(0.97); }
+#view-connections .secondary { display: flex; justify-content: center; gap: 10px; margin-top: 16px; color: var(--muted); font-size: 13px; }
+#view-connections .link { border: 0; background: none; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; font-size: 13px; padding: 0; }
+#view-connections .link:hover { color: var(--text); }
+#view-connections .toast {
+  position: fixed; left: 50%; top: 92px; transform: translateX(-50%);
+  background: #121212; color: #fff; padding: 10px 16px; border-radius: 6px; font-weight: 600; font-size: 15px;
+  animation: drop 0.2s ease; z-index: 10; white-space: nowrap;
+}
+@keyframes drop { from { opacity: 0; transform: translate(-50%, -6px); } to { opacity: 1; transform: translate(-50%, 0); } }
+#view-connections .hidden { display: none !important; }
+#view-connections .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 20; }
+#view-connections .sheet { position: relative; width: 100%; max-width: 420px; background: #fff; border-radius: 12px; padding: 34px 26px 24px; text-align: center; box-shadow: 0 30px 80px -30px rgba(0,0,0,0.6); animation: up 0.25s ease; }
+@keyframes up { from { transform: translateY(16px); opacity: 0; } to { transform: none; opacity: 1; } }
+#view-connections .sheet h2 { margin: 0 0 4px; font-family: Georgia, "Times New Roman", serif; font-size: 30px; }
+#view-connections .close { position: absolute; right: 12px; top: 10px; width: 32px; height: 32px; border: 0; background: transparent; font-size: 18px; }
+#view-connections .emoji { display: inline-grid; gap: 2px; margin: 18px auto 20px; font-size: 26px; line-height: 1; }
+#view-connections .emoji div { display: flex; gap: 2px; }
+#view-connections .row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+#view-connections .tiny { color: var(--muted); font-size: 12px; margin: 18px 0 0; }
+#view-connections .rules { text-align: left; padding-left: 20px; margin: 10px 0; }
+#view-connections .rules li { margin: 6px 0; }
+#view-connections .legend { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 14px; font-size: 13px; color: var(--muted); }
+#view-connections .legend i { width: 16px; height: 16px; border-radius: 4px; display: inline-block; }
+#view-connections .legend i.y { background: var(--y); }
+#view-connections .legend i.g { background: var(--g); }
+#view-connections .legend i.b { background: var(--b); }
+#view-connections .legend i.p { background: var(--p); }
+@media (max-width: 420px) {#view-connections .tile { height: 72px; }
+#view-connections .group { height: 72px; }
+#view-connections .pill { padding: 11px 16px; font-size: 14px; }}
+
+#view-connections { min-height: 100vh; }
+#view-connections .toast, #view-connections .modal { position: fixed; }
+</style>
+</head>
+<body class="is-menu">
+<div id="view-menu">
+  <div class="wrap">
+    <section class="hero">
+      <h1>Daytona <em>Games</em></h1>
+    </section>
+
+    <section class="grid">
+      <a class="card" href="#flappy">
+        <div class="art flappy">
+          <span class="cloud" style="left: 12%; top: 18%; width: 70px; height: 22px;"></span>
+          <span class="cloud" style="left: 62%; top: 30%; width: 90px; height: 26px;"></span>
+          <div class="pipe top" style="left: 18%; top: -2px; height: 70px;"></div>
+          <div class="pipe bot" style="left: 18%; bottom: 28%; height: 40px;"></div>
+          <div class="pipe top" style="right: 14%; top: -2px; height: 36px;"></div>
+          <div class="pipe bot" style="right: 14%; bottom: 28%; height: 74px;"></div>
+          <div class="bird"><span class="wing"></span></div>
+          <div class="score" id="flappy-score">12</div>
+        </div>
+        <div class="body">
+          <span class="kicker">Arcade</span>
+          <h2>Flappy Bird</h2>
+          <p>Tap to flap, thread the pipes, don't blink. Medals at 10, 20, 30 and 40.</p>
+          <div class="foot"><span class="stat" id="flappy-stat"></span><span class="play">Play →</span></div>
+        </div>
+      </a>
+
+      <a class="card" href="#connections">
+        <div class="art connections">
+          <div class="board">
+            <span class="bar y">FRUITS</span>
+            <span class="bar g">CHESS PIECES</span>
+            <i>SNOW</i><i class="sel">THAMES</i><i>FOOT</i><i class="sel">NILE</i>
+            <i class="sel">SEINE</i><i>EYE</i><i class="sel">DANUBE</i><i>BASKET</i>
+          </div>
+        </div>
+        <div class="body">
+          <span class="kicker">Word puzzle</span>
+          <h2>Connections</h2>
+          <p>Sixteen words, four hidden groups, four mistakes. Endless puzzles.</p>
+          <div class="foot"><span class="stat" id="conn-stat"></span><span class="play">Play →</span></div>
+        </div>
+      </a>
+    </section>
+
+  </div>
+  
+</div>
+<div id="view-flappy" hidden>
+  <a class="back" href="#menu">← Games</a>
+  <canvas id="game" width="288" height="512"></canvas>
+  
+</div>
+<div id="view-connections" hidden>
+  <header class="top">
+    <a class="back" href="#menu">← Games</a>
+    <div class="title">
+      <h1>Connections</h1>
+      <p id="puzzle-label" class="sub"></p>
+    </div>
+    <button id="btn-help" class="icon" title="How to play">?</button>
+  </header>
+
+  <main>
+    <p class="lede">Create four groups of four!</p>
+
+    <div id="board">
+      <div id="solved"></div>
+      <div id="grid"></div>
+    </div>
+
+    <div class="mistakes">
+      <span>Mistakes Remaining:</span>
+      <span id="dots" class="dots"><i></i><i></i><i></i><i></i></span>
+    </div>
+
+    <div class="actions">
+      <button id="btn-shuffle" class="pill">Shuffle</button>
+      <button id="btn-deselect" class="pill" disabled>Deselect All</button>
+      <button id="btn-submit" class="pill primary" disabled>Submit</button>
+    </div>
+    <div class="secondary">
+      <button id="btn-skip" class="link">Skip this puzzle</button>
+      <span>·</span>
+      <button id="btn-random" class="link">Random puzzle</button>
+    </div>
+  </main>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- results -->
+  <div id="modal" class="modal hidden">
+    <div class="sheet">
+      <button class="close" data-close>✕</button>
+      <h2 id="result-title">Perfect!</h2>
+      <p id="result-sub" class="sub"></p>
+      <div id="result-grid" class="emoji"></div>
+      <div class="row">
+        <button id="btn-share" class="pill primary">Share</button>
+        <button id="btn-another" class="pill">Next puzzle</button>
+      </div>
+      <p class="tiny">Unlimited puzzles. Your progress on each one is saved on this device.</p>
+    </div>
+  </div>
+
+  <!-- help -->
+  <div id="help" class="modal hidden">
+    <div class="sheet">
+      <button class="close" data-close>✕</button>
+      <h2>How to play</h2>
+      <ul class="rules">
+        <li>Find groups of four items that share something in common.</li>
+        <li>Select four items and tap <b>Submit</b> to check your guess.</li>
+        <li>Find the groups without making four mistakes.</li>
+      </ul>
+      <p class="sub">Category examples: <b>FISH</b> — Bass, Flounder, Salmon, Trout. <b>FIRE ___</b> — Ant, Drill, Island, Opal.</p>
+      <p class="sub">Categories will always be more specific than "5-letter words" or "names". Each puzzle has exactly one solution. Watch out for words that seem to belong to multiple categories.</p>
+      <div class="legend"><i class="y"></i> Straightforward <i class="g"></i> <i class="b"></i> <i class="p"></i> Tricky</div>
+    </div>
+  </div>
+
+  
+  
+</div>
+<script>
+// ---- router: one file, three screens ----
+(function () {
+  const views = ["menu", "flappy", "connections"];
+  function show() {
+    const h = (location.hash || "#menu").slice(1);
+    const v = views.includes(h) ? h : "menu";
+    for (const name of views) document.getElementById("view-" + name).hidden = name !== v;
+    document.body.className = "is-" + v;
+    window.dispatchEvent(new Event("resize"));
+    window.scrollTo(0, 0);
+    if (v === "menu") refreshStats();
+  }
+  function refreshStats() {
+    try {
+      const best = Number(localStorage.getItem("flappy:best") || 0);
+      const fs = document.getElementById("flappy-stat"), sc = document.getElementById("flappy-score");
+      if (best > 0) { fs.innerHTML = `Best <b>${best}</b>`; sc.textContent = best; }
+      const done = Number(JSON.parse(localStorage.getItem("connections:solved") || "0")) || 0;
+      if (done > 0) document.getElementById("conn-stat").innerHTML = `<b>${done}</b> solved`;
+    } catch (e) {}
+  }
+  window.addEventListener("hashchange", show);
+  show();
+})();
+</script>
+<script>/* Puzzle bank. Each puzzle: four groups in difficulty order
+   (yellow → green → blue → purple). Words are unique within a puzzle and
+   every puzzle has exactly one valid solution. */
+window.PUZZLES = [
+  [
+    ["Fruits", ["PEAR", "PLUM", "FIG", "MANGO"]],
+    ["Tech giants", ["APPLE", "META", "ORACLE", "TESLA"]],
+    ["Rivers", ["NILE", "THAMES", "SEINE", "DANUBE"]],
+    ["___ball", ["FOOT", "BASKET", "SNOW", "EYE"]],
+  ],
+  [
+    ["Dog breeds", ["BOXER", "POODLE", "BEAGLE", "HUSKY"]],
+    ["Things with keys", ["PIANO", "KEYBOARD", "MAP", "LOCK"]],
+    ["Chess pieces", ["KING", "QUEEN", "BISHOP", "ROOK"]],
+    ["Boxing terms", ["JAB", "HOOK", "ROUND", "BELL"]],
+  ],
+  [
+    ["Weather", ["RAIN", "SNOW", "HAIL", "FOG"]],
+    ["Coffee orders", ["LATTE", "MOCHA", "ESPRESSO", "AMERICANO"]],
+    ["Candy bars", ["MARS", "TWIX", "SNICKERS", "BOUNTY"]],
+    ["Planets", ["VENUS", "SATURN", "JUPITER", "MERCURY"]],
+  ],
+  [
+    ["Body parts", ["ARM", "LEG", "HIP", "TOE"]],
+    ["Things you can break", ["FAST", "RECORD", "NEWS", "ICE"]],
+    ["Units of time", ["SECOND", "MINUTE", "HOUR", "WEEK"]],
+    ["___fish", ["STAR", "CAT", "GOLD", "SWORD"]],
+  ],
+  [
+    ["Colors", ["RED", "BLUE", "PINK", "TEAL"]],
+    ["Card games", ["POKER", "BRIDGE", "RUMMY", "HEARTS"]],
+    ["Found in a bathroom", ["SINK", "TOWEL", "MIRROR", "TUB"]],
+    ["Poker actions", ["FOLD", "CALL", "RAISE", "CHECK"]],
+  ],
+  [
+    ["Vegetables", ["KALE", "LEEK", "BEET", "CORN"]],
+    ["Music genres", ["ROCK", "JAZZ", "FOLK", "SOUL"]],
+    ["Famous Michaels", ["JORDAN", "JACKSON", "PHELPS", "SCOTT"]],
+    ["Dances", ["TANGO", "SALSA", "WALTZ", "SWING"]],
+  ],
+  [
+    ["Farm animals", ["COW", "PIG", "HEN", "GOAT"]],
+    ["Social apps", ["SNAP", "TIKTOK", "REDDIT", "DISCORD"]],
+    ["___board", ["KEY", "SKATE", "SURF", "DASH"]],
+    ["Camera terms", ["LENS", "FLASH", "ZOOM", "FOCUS"]],
+  ],
+  [
+    ["Currencies", ["DOLLAR", "EURO", "YEN", "PESO"]],
+    ["Superheroes", ["BATMAN", "FLASH", "THOR", "HULK"]],
+    ["3D shapes", ["CUBE", "CONE", "PRISM", "SPHERE"]],
+    ["___man", ["SNOW", "SPIDER", "IRON", "SAND"]],
+  ],
+  [
+    ["Pizza toppings", ["OLIVE", "BACON", "ONION", "PEPPER"]],
+    ["Shakespeare plays", ["HAMLET", "MACBETH", "OTHELLO", "TEMPEST"]],
+    ["Sneaker brands", ["NIKE", "PUMA", "VANS", "REEBOK"]],
+    ["Apple products", ["MAC", "IPAD", "WATCH", "AIRPODS"]],
+  ],
+  [
+    ["School subjects", ["MATH", "HISTORY", "ART", "MUSIC"]],
+    ["Zodiac signs", ["LEO", "ARIES", "LIBRA", "VIRGO"]],
+    ["Streaming services", ["NETFLIX", "HULU", "PEACOCK", "MAX"]],
+    ["Kitchen tools", ["WHISK", "LADLE", "SPATULA", "GRATER"]],
+  ],
+  [
+    ["Sports", ["GOLF", "TENNIS", "RUGBY", "POLO"]],
+    ["Car brands", ["FORD", "AUDI", "KIA", "TESLA"]],
+    ["Seen in the sky", ["SUN", "MOON", "STAR", "CLOUD"]],
+    ["___print", ["BLUE", "FOOT", "FINGER", "PAW"]],
+  ],
+  [
+    ["Metals", ["GOLD", "IRON", "TIN", "COPPER"]],
+    ["Cooking methods", ["BAKE", "FRY", "GRILL", "ROAST"]],
+    ["Desserts", ["PIE", "CAKE", "TART", "FLAN"]],
+    ["Golden ___", ["GATE", "RETRIEVER", "RATIO", "HOUR"]],
+  ],
+  [
+    ["Fast food chains", ["SUBWAY", "CHIPOTLE", "POPEYES", "SONIC"]],
+    ["Public transit", ["BUS", "TRAM", "FERRY", "METRO"]],
+    ["At the beach", ["SAND", "SHELL", "WAVE", "TOWEL"]],
+    ["___fall", ["WATER", "NIGHT", "RAIN", "FREE"]],
+  ],
+  [
+    ["Instruments", ["DRUM", "HARP", "FLUTE", "CELLO"]],
+    ["Greek letters", ["ALPHA", "BETA", "DELTA", "OMEGA"]],
+    ["Halloween", ["GHOST", "WITCH", "PUMPKIN", "BAT"]],
+    ["Jackets", ["BOMBER", "DENIM", "PUFFER", "BLAZER"]],
+  ],
+  [
+    ["Ice cream flavors", ["VANILLA", "MINT", "PISTACHIO", "CHERRY"]],
+    ["Programming languages", ["PYTHON", "RUBY", "SWIFT", "RUST"]],
+    ["Things you can crack", ["CODE", "EGG", "JOKE", "KNUCKLE"]],
+    ["One-name pop stars", ["DRAKE", "ADELE", "RIHANNA", "BEYONCE"]],
+  ],
+  [
+    ["In a wallet", ["CASH", "CARD", "ID", "RECEIPT"]],
+    ["Poker hands", ["FLUSH", "PAIR", "STRAIGHT", "TRIPS"]],
+    ["Inside Out emotions", ["JOY", "FEAR", "ANGER", "DISGUST"]],
+    ["___way", ["HIGH", "SUB", "DRIVE", "RUN"]],
+  ],
+  [
+    ["Breakfast foods", ["BAGEL", "WAFFLE", "OMELET", "CEREAL"]],
+    ["NBA teams", ["HEAT", "JAZZ", "MAGIC", "THUNDER"]],
+    ["Sticky things", ["GLUE", "TAPE", "HONEY", "GUM"]],
+    ["___ball", ["FIRE", "PIN", "MEAT", "ODD"]],
+  ],
+  [
+    ["Parts of a story", ["PLOT", "THEME", "SETTING", "CLIMAX"]],
+    ["Landforms", ["HILL", "VALLEY", "PLAIN", "CLIFF"]],
+    ["Airplane words", ["WING", "PILOT", "CABIN", "AISLE"]],
+    ["Bee sounds & actions", ["BUZZ", "STING", "HUM", "SWARM"]],
+  ],
+  [
+    ["Cheeses", ["BRIE", "FETA", "GOUDA", "SWISS"]],
+    ["Fonts", ["ARIAL", "CALIBRI", "GEORGIA", "VERDANA"]],
+    ["US states", ["TEXAS", "OHIO", "MAINE", "UTAH"]],
+    ["Things you can run", ["MILE", "RACE", "ERRAND", "BUSINESS"]],
+  ],
+  [
+    ["Sea creatures", ["CRAB", "SEAL", "SQUID", "SHARK"]],
+    ["Breads", ["RYE", "PITA", "NAAN", "SOURDOUGH"]],
+    ["Hairstyles", ["BUN", "BOB", "BRAID", "MULLET"]],
+    ["Golf scores", ["PAR", "EAGLE", "BIRDIE", "BOGEY"]],
+  ],
+  [
+    ["Citrus fruits", ["LEMON", "LIME", "ORANGE", "GRAPEFRUIT"]],
+    ["Things that are cold", ["ICE", "SNOW", "FREEZER", "WINTER"]],
+    ["Web browsers", ["CHROME", "SAFARI", "EDGE", "OPERA"]],
+    ["___ blue", ["NAVY", "ROYAL", "SKY", "BABY"]],
+  ],
+  [
+    ["Pets", ["CAT", "DOG", "HAMSTER", "PARROT"]],
+    ["Board games", ["CHESS", "RISK", "CLUE", "SORRY"]],
+    ["Things with teeth", ["COMB", "SAW", "ZIPPER", "GEAR"]],
+    ["Apology words", ["OOPS", "PARDON", "MY BAD", "EXCUSE ME"]],
+  ],
+  [
+    ["Shoes", ["BOOT", "LOAFER", "SANDAL", "CLOG"]],
+    ["Car parts", ["TRUNK", "HOOD", "BUMPER", "WIPER"]],
+    ["Elephant features", ["TUSK", "EAR", "TAIL", "HIDE"]],
+    ["Things you can hail", ["TAXI", "CAB", "HERO", "KING"]],
+  ],
+  [
+    ["Soft drinks", ["COKE", "SPRITE", "FANTA", "PEPSI"]],
+    ["Mythical creatures", ["DRAGON", "UNICORN", "GRIFFIN", "PHOENIX"]],
+    ["Things in a toolbox", ["HAMMER", "WRENCH", "PLIERS", "LEVEL"]],
+    ["Video game consoles", ["SWITCH", "XBOX", "WII", "GAMECUBE"]],
+  ],
+  [
+    ["Birds", ["ROBIN", "EAGLE", "OWL", "CROW"]],
+    ["Batman villains", ["JOKER", "PENGUIN", "RIDDLER", "BANE"]],
+    ["At a birthday party", ["CAKE", "CANDLE", "BALLOON", "GIFT"]],
+    ["Nuts", ["PECAN", "ALMOND", "CASHEW", "WALNUT"]],
+  ],
+  [
+    ["Cereals", ["CHEERIOS", "FROOT LOOPS", "TRIX", "KIX"]],
+    ["Rappers", ["EMINEM", "KENDRICK", "NAS", "FUTURE"]],
+    ["Seasons", ["SPRING", "SUMMER", "FALL", "WINTER"]],
+    ["Things with springs", ["MATTRESS", "TRAMPOLINE", "PEN", "WATCH"]],
+  ],
+  [
+    ["Shapes", ["CIRCLE", "SQUARE", "TRIANGLE", "OVAL"]],
+    ["Social media actions", ["LIKE", "SHARE", "POST", "FOLLOW"]],
+    ["In a classroom", ["DESK", "CHALK", "GLOBE", "ERASER"]],
+    ["___ market", ["STOCK", "FLEA", "BLACK", "SUPER"]],
+  ],
+  [
+    ["Reptiles", ["SNAKE", "LIZARD", "TURTLE", "GECKO"]],
+    ["Fruits that are also colors", ["ORANGE", "PEACH", "LIME", "PLUM"]],
+    ["Pokémon", ["PIKACHU", "CHARIZARD", "SQUIRTLE", "EEVEE"]],
+    ["Texting abbreviations", ["LOL", "BRB", "IDK", "TBH"]],
+  ],
+  [
+    ["Team sports", ["SOCCER", "HOCKEY", "VOLLEYBALL", "BASKETBALL"]],
+    ["Disney princesses", ["ARIEL", "BELLE", "JASMINE", "MOANA"]],
+    ["Flowers", ["ROSE", "TULIP", "DAISY", "LILY"]],
+    ["Sandwiches", ["BLT", "CLUB", "SUB", "WRAP"]],
+  ],
+  [
+    ["Vegetables", ["CARROT", "PEA", "BEAN", "ONION"]],
+    ["Pixar movies", ["UP", "CARS", "COCO", "SOUL"]],
+    ["Card suits", ["HEARTS", "SPADES", "CLUBS", "DIAMONDS"]],
+    ["Baseball positions", ["PITCHER", "CATCHER", "SHORTSTOP", "OUTFIELD"]],
+  ],
+  [
+    ["Instruments", ["GUITAR", "BASS", "PIANO", "VIOLIN"]],
+    ["Fish", ["TROUT", "SALMON", "TUNA", "COD"]],
+    ["Gym equipment", ["DUMBBELL", "TREADMILL", "BENCH", "MAT"]],
+    ["___stand", ["HAND", "BAND", "NEWS", "KICK"]],
+  ],
+  [
+    ["Sundae toppings", ["SPRINKLES", "FUDGE", "CHERRY", "WHIPPED CREAM"]],
+    ["In a pencil case", ["PENCIL", "ERASER", "RULER", "SHARPENER"]],
+    ["Burger toppings", ["LETTUCE", "TOMATO", "PICKLE", "CHEESE"]],
+    ["Round things", ["WHEEL", "COIN", "DONUT", "PIZZA"]],
+  ],
+  [
+    ["Thanksgiving dinner", ["TURKEY", "STUFFING", "GRAVY", "PIE"]],
+    ["Countries", ["FRANCE", "SPAIN", "JAPAN", "BRAZIL"]],
+    ["___pool", ["CAR", "WHIRL", "DEAD", "GENE"]],
+    ["Frozen things", ["ICE", "POPSICLE", "TUNDRA", "ELSA"]],
+  ],
+  [
+    ["Dog commands", ["FETCH", "SIT", "STAY", "ROLL OVER"]],
+    ["Tree parts", ["BARK", "ROOT", "LEAF", "TRUNK"]],
+    ["Swimming strokes", ["FREESTYLE", "BACKSTROKE", "BUTTERFLY", "BREASTSTROKE"]],
+    ["___berry", ["BLUE", "STRAW", "RASP", "BLACK"]],
+  ],
+  [
+    ["Fast food order", ["FRIES", "NUGGETS", "BURGER", "SHAKE"]],
+    ["Hogwarts houses", ["GRYFFINDOR", "SLYTHERIN", "HUFFLEPUFF", "RAVENCLAW"]],
+    ["Snakes", ["COBRA", "PYTHON", "VIPER", "MAMBA"]],
+    ["___shake", ["HAND", "MILK", "EARTH", "HARLEM"]],
+  ],
+  [
+    ["Rainbow colors", ["INDIGO", "VIOLET", "ORANGE", "YELLOW"]],
+    ["School day", ["LOCKER", "BELL", "BUS", "HOMEWORK"]],
+    ["Hair tools", ["BRUSH", "COMB", "DRYER", "CURLER"]],
+    ["___cut", ["HAIR", "SHORT", "BUZZ", "PAPER"]],
+  ],
+  [
+    ["Sports gear", ["BAT", "GLOVE", "HELMET", "PUCK"]],
+    ["Roman gods", ["MARS", "JUPITER", "VENUS", "NEPTUNE"]],
+    ["Cakes", ["SPONGE", "POUND", "LAYER", "BUNDT"]],
+    ["Foods with layers", ["ONION", "LASAGNA", "PARFAIT", "BAKLAVA"]],
+  ],
+  [
+    ["Zoo animals", ["LION", "ZEBRA", "GIRAFFE", "HIPPO"]],
+    ["At the movies", ["POPCORN", "TICKET", "TRAILER", "SCREEN"]],
+    ["Winter clothes", ["SCARF", "MITTENS", "BEANIE", "PARKA"]],
+    ["___shot", ["MOON", "SLING", "HOT", "SNAP"]],
+  ],
+  [
+    ["Bugs", ["ANT", "BEE", "FLY", "MOTH"]],
+    ["Move fast", ["DASH", "SPRINT", "BOLT", "RACE"]],
+    ["Airport", ["GATE", "TERMINAL", "RUNWAY", "LUGGAGE"]],
+    ["___ zone", ["END", "TIME", "COMFORT", "DANGER"]],
+  ],
+  [
+    ["Mexican food", ["TACO", "BURRITO", "NACHOS", "SALSA"]],
+    ["Olympic sports", ["DIVING", "FENCING", "ROWING", "ARCHERY"]],
+    ["Doctors", ["DENTIST", "SURGEON", "VET", "PEDIATRICIAN"]],
+    ["___dog", ["HOT", "BULL", "WATCH", "UNDER"]],
+  ],
+  [
+    ["Trees", ["OAK", "PINE", "MAPLE", "BIRCH"]],
+    ["In a bedroom", ["BED", "PILLOW", "LAMP", "DRESSER"]],
+    ["Bowling", ["STRIKE", "SPARE", "GUTTER", "LANE"]],
+    ["___light", ["FLASH", "SPOT", "MOON", "HEAD"]],
+  ],
+  [
+    ["Face parts", ["NOSE", "CHIN", "BROW", "LIP"]],
+    ["Winter Olympics", ["SKI", "LUGE", "CURLING", "HOCKEY"]],
+    ["Things you hit", ["JACKPOT", "SNOOZE", "GYM", "ROAD"]],
+    ["___stick", ["CHOP", "DRUM", "JOY", "YARD"]],
+  ],
+  [
+    ["Kitchen appliances", ["OVEN", "TOASTER", "BLENDER", "MICROWAVE"]],
+    ["Cartoon ducks", ["DONALD", "DAFFY", "HOWARD", "SCROOGE"]],
+    ["Things with wings", ["PLANE", "BIRD", "BAT", "ANGEL"]],
+    ["___house", ["LIGHT", "GREEN", "WARE", "PENT"]],
+  ],
+  [
+    ["Recess games", ["TAG", "DODGEBALL", "KICKBALL", "HOPSCOTCH"]],
+    ["Cat breeds", ["TABBY", "SIAMESE", "PERSIAN", "SPHYNX"]],
+    ["Music terms", ["TEMPO", "BEAT", "NOTE", "CHORD"]],
+    ["___line", ["DEAD", "HEAD", "OUT", "PUNCH"]],
+  ],
+  [
+    ["Mario characters", ["MARIO", "LUIGI", "PEACH", "BOWSER"]],
+    ["Fruits", ["GRAPE", "MELON", "BANANA", "APRICOT"]],
+    ["Wind & rain", ["BREEZE", "GUST", "STORM", "DRIZZLE"]],
+    ["___storm", ["BRAIN", "SAND", "FIRE", "SNOW"]],
+  ],
+  [
+    ["Night sky", ["MOON", "STAR", "COMET", "PLANET"]],
+    ["Dr. Seuss characters", ["GRINCH", "LORAX", "HORTON", "THING"]],
+    ["Chocolate brands", ["HERSHEY", "KITKAT", "REESES", "GODIVA"]],
+    ["Types of rice", ["BROWN", "WILD", "JASMINE", "BASMATI"]],
+  ],
+  [
+    ["Camping", ["TENT", "CAMPFIRE", "LANTERN", "SLEEPING BAG"]],
+    ["Yoga poses", ["COBRA", "TREE", "WARRIOR", "PLANK"]],
+    ["Things you pitch", ["IDEA", "BALL", "VOICE", "FIT"]],
+    ["Superman", ["KRYPTON", "CAPE", "CLARK", "LOIS"]],
+  ],
+  [
+    ["Drinks", ["TEA", "JUICE", "MILK", "WATER"]],
+    ["Golf clubs", ["DRIVER", "IRON", "WEDGE", "PUTTER"]],
+    ["Bike parts", ["PEDAL", "CHAIN", "SADDLE", "SPOKE"]],
+    ["Things you shake", ["MARACA", "SNOW GLOBE", "POLAROID", "MARTINI"]],
+  ],
+  [
+    ["Halloween candy", ["SKITTLES", "REESES", "TWIZZLERS", "NERDS"]],
+    ["Greek gods", ["ZEUS", "HERA", "ARES", "APOLLO"]],
+    ["Big cats", ["TIGER", "LEOPARD", "JAGUAR", "COUGAR"]],
+    ["Pasta", ["PENNE", "ZITI", "ORZO", "FUSILLI"]],
+  ],
+  [
+    ["Money slang", ["DOUGH", "BUCKS", "BREAD", "CHEDDAR"]],
+    ["NBA teams", ["LAKERS", "CELTICS", "BULLS", "KNICKS"]],
+    ["Cheeses", ["GOUDA", "BRIE", "FETA", "SWISS"]],
+    ["Condiments", ["RANCH", "KETCHUP", "MAYO", "MUSTARD"]],
+  ],
+  [
+    ["Christmas", ["SANTA", "ELF", "REINDEER", "STOCKING"]],
+    ["Dinosaurs", ["T-REX", "RAPTOR", "STEGOSAURUS", "TRICERATOPS"]],
+    ["Basketball plays", ["DUNK", "LAYUP", "REBOUND", "ASSIST"]],
+    ["___ship", ["FRIEND", "SPACE", "RELATION", "CHAMPION"]],
+  ],
+  [
+    ["Ocean", ["REEF", "KELP", "CORAL", "TIDE"]],
+    ["Laundry", ["DETERGENT", "DRYER", "HAMPER", "BLEACH"]],
+    ["Musicals", ["CATS", "WICKED", "HAMILTON", "GREASE"]],
+    ["___coat", ["RAIN", "OVER", "TURN", "TOP"]],
+  ],
+  [
+    ["Garden tools", ["HOSE", "SHOVEL", "SEED", "RAKE"]],
+    ["Mario Kart items", ["BANANA", "SHELL", "STAR", "MUSHROOM"]],
+    ["Wedding", ["RING", "VOWS", "BOUQUET", "AISLE"]],
+    ["___case", ["SUIT", "BOOK", "STAIR", "BRIEF"]],
+  ],
+  [
+    ["Feelings", ["HAPPY", "SAD", "MAD", "SCARED"]],
+    ["Seven Dwarfs", ["DOC", "GRUMPY", "SLEEPY", "BASHFUL"]],
+    ["Things with buttons", ["SHIRT", "REMOTE", "ELEVATOR", "COAT"]],
+    ["___cast", ["POD", "FORE", "BROAD", "OVER"]],
+  ],
+  [
+    ["Things that fly", ["KITE", "PLANE", "DRONE", "JET"]],
+    ["Sushi", ["TUNA", "SALMON", "EEL", "ROLL"]],
+    ["Fire", ["FLAME", "SMOKE", "ASH", "EMBER"]],
+    ["___roll", ["EGG", "DRUM", "PAY", "HONOR"]],
+  ],
+  [
+    ["Fast animals", ["CHEETAH", "FALCON", "HARE", "GREYHOUND"]],
+    ["Carnival", ["FERRIS WHEEL", "COTTON CANDY", "CLOWN", "RIDE"]],
+    ["Sizes", ["SMALL", "MEDIUM", "LARGE", "JUMBO"]],
+    ["___paper", ["NEWS", "WALL", "SAND", "TOILET"]],
+  ],
+  [
+    ["Pancake toppings", ["SYRUP", "BUTTER", "BERRIES", "NUTELLA"]],
+    ["In a band", ["DRUMS", "BASS", "GUITAR", "KEYS"]],
+    ["US presidents", ["LINCOLN", "WASHINGTON", "KENNEDY", "OBAMA"]],
+    ["Sleepover", ["PILLOW FIGHT", "MOVIE", "POPCORN", "TRUTH OR DARE"]],
+  ],
+  [
+    ["Toys", ["LEGO", "YOYO", "SLINKY", "DOLL"]],
+    ["Things that bounce", ["BALL", "KANGAROO", "TRAMPOLINE", "CHECK"]],
+    ["Ways to cook eggs", ["SCRAMBLED", "POACHED", "FRIED", "BOILED"]],
+    ["___mate", ["ROOM", "CLASS", "TEAM", "SOUL"]],
+  ],
+  [
+    ["Fruits with pits", ["PEACH", "CHERRY", "PLUM", "MANGO"]],
+    ["Star Wars", ["YODA", "VADER", "LEIA", "CHEWIE"]],
+    ["Board game pieces", ["DICE", "TOKEN", "CARD", "SPINNER"]],
+    ["___root", ["BEET", "SQUARE", "GRASS", "TAP"]],
+  ],
+  [
+    ["At the pool", ["FLOAT", "GOGGLES", "NOODLE", "LADDER"]],
+    ["Rap terms", ["BEAT", "FLOW", "BARS", "HOOK"]],
+    ["Fishing gear", ["ROD", "REEL", "BAIT", "LURE"]],
+    ["___boat", ["SAIL", "ROW", "TUG", "SPEED"]],
+  ],
+  [
+    ["Spices", ["PEPPER", "CUMIN", "PAPRIKA", "GINGER"]],
+    ["Cookies", ["OREO", "SNICKERDOODLE", "MACARON", "BISCOTTI"]],
+    ["Car types", ["SEDAN", "COUPE", "HATCHBACK", "MINIVAN"]],
+    ["___bread", ["CORN", "SHORT", "FLAT", "SWEET"]],
+  ],
+  [
+    ["Ice sports", ["HOCKEY", "CURLING", "LUGE", "BOBSLED"]],
+    ["In space", ["ASTEROID", "COMET", "GALAXY", "NEBULA"]],
+    ["Coffee shop", ["BARISTA", "MUG", "BEANS", "FOAM"]],
+    ["___ trip", ["ROAD", "FIELD", "GUILT", "ROUND"]],
+  ],
+  [
+    ["Sweet things", ["CANDY", "HONEY", "SUGAR", "SYRUP"]],
+    ["Terms of endearment", ["BABE", "DEAR", "SWEETIE", "DARLING"]],
+    ["___ truck", ["PICKUP", "DUMP", "TOW", "FIRE"]],
+    ["___fly", ["BUTTER", "DRAGON", "HOUSE", "BAR"]],
+  ],
+  [
+    ["Crops", ["WHEAT", "CORN", "RICE", "SOY"]],
+    ["Skateboard tricks", ["OLLIE", "KICKFLIP", "GRIND", "SHUVIT"]],
+    ["Movie genres", ["HORROR", "COMEDY", "DRAMA", "ACTION"]],
+    ["___corn", ["POP", "UNI", "PEPPER", "CANDY"]],
+  ],
+  [
+    ["Pizza chains", ["DOMINOS", "PAPA JOHNS", "LITTLE CAESARS", "PIZZA HUT"]],
+    ["Things you can flip", ["COIN", "PANCAKE", "SWITCH", "BURGER"]],
+    ["Ocean animals", ["WHALE", "DOLPHIN", "OCTOPUS", "JELLYFISH"]],
+    ["___book", ["FACE", "NOTE", "TEXT", "YEAR"]],
+  ],
+  [
+    ["Colors", ["PURPLE", "GRAY", "BROWN", "WHITE"]],
+    ["Marvel heroes", ["THOR", "HULK", "IRON MAN", "BLACK WIDOW"]],
+    ["Bakery", ["CROISSANT", "MUFFIN", "SCONE", "DANISH"]],
+    ["___ Friday", ["BLACK", "GOOD", "CASUAL", "FREAKY"]],
+  ],
+  [
+    ["Parts of a car", ["TIRE", "ENGINE", "BRAKE", "MIRROR"]],
+    ["Things at a concert", ["STAGE", "ENCORE", "MOSH PIT", "SETLIST"]],
+    ["Fruit", ["KIWI", "PAPAYA", "GUAVA", "LYCHEE"]],
+    ["___ code", ["ZIP", "DRESS", "BAR", "QR"]],
+  ],
+  [
+    ["Desserts", ["BROWNIE", "COOKIE", "CUPCAKE", "PUDDING"]],
+    ["Fundraiser sales", ["LEMONADE", "COOKIES", "RAFFLE", "CANDY BARS"]],
+    ["Things with strings", ["GUITAR", "KITE", "PUPPET", "YOYO"]],
+    ["___ party", ["BLOCK", "SEARCH", "PIZZA", "SLUMBER"]],
+  ],
+  [
+    ["Big cities", ["TOKYO", "PARIS", "LONDON", "CAIRO"]],
+    ["Cheeses", ["MOZZARELLA", "PARMESAN", "RICOTTA", "PROVOLONE"]],
+    ["Things that are loud", ["SIREN", "THUNDER", "ALARM", "DRUM"]],
+    ["Paris ___", ["HILTON", "TEXAS", "AGREEMENT", "FASHION WEEK"]],
+  ],
+  [
+    ["Pets", ["RABBIT", "GOLDFISH", "TURTLE", "GERBIL"]],
+    ["Ways to say yes", ["YEP", "SURE", "TOTALLY", "ABSOLUTELY"]],
+    ["Fortnite", ["BATTLE BUS", "STORM", "LOOT", "VICTORY ROYALE"]],
+    ["___ hop", ["HIP", "BUNNY", "BAR", "ISLAND"]],
+  ],
+  [
+    ["Sea travel", ["SHIP", "YACHT", "CANOE", "KAYAK"]],
+    ["Coins", ["PENNY", "NICKEL", "DIME", "QUARTER"]],
+    ["Track events", ["RELAY", "HURDLES", "SHOT PUT", "LONG JUMP"]],
+    ["___ pass", ["HALL", "BOARDING", "BACKSTAGE", "SEASON"]],
+  ],
+  [
+    ["Winter", ["SNOWMAN", "SLED", "ICICLE", "FROST"]],
+    ["Talk show hosts", ["ELLEN", "OPRAH", "FALLON", "KIMMEL"]],
+    ["Wolf associations", ["HOWL", "PACK", "ALPHA", "MOON"]],
+    ["___ time", ["BED", "LUNCH", "SCREEN", "OVER"]],
+  ],
+  [
+    ["Emojis", ["SKULL", "FIRE", "HEART", "EYES"]],
+    ["Grammy categories", ["ALBUM", "RECORD", "SONG", "NEW ARTIST"]],
+    ["Card games for kids", ["UNO", "GO FISH", "WAR", "SPOONS"]],
+    ["___ light", ["SUN", "CANDLE", "LIME", "GREEN"]],
+  ],
+  [
+    ["Things that are yellow", ["BANANA", "TAXI", "SPONGEBOB", "SCHOOL BUS"]],
+    ["Vampire words", ["FANG", "COFFIN", "GARLIC", "STAKE"]],
+    ["Lunch box", ["SANDWICH", "APPLE", "JUICE BOX", "CHIPS"]],
+    ["Words before 'off'", ["KICK", "TAKE", "SHOW", "PLAY"]],
+  ],
+  [
+    ["Houses", ["CABIN", "MANSION", "COTTAGE", "IGLOO"]],
+    ["Female animals", ["HEN", "COW", "DOE", "MARE"]],
+    ["Pool games", ["MARCO POLO", "CANNONBALL", "CHICKEN FIGHT", "SHARKS AND MINNOWS"]],
+    ["___ tooth", ["SWEET", "WISDOM", "BABY", "BLUE"]],
+  ],
+  [
+    ["NFL positions", ["QUARTERBACK", "KICKER", "LINEMAN", "SAFETY"]],
+    ["Cinnamon things", ["ROLL", "TOAST CRUNCH", "STICK", "CHALLENGE"]],
+    ["Wizard of Oz", ["DOROTHY", "TOTO", "SCARECROW", "TIN MAN"]],
+    ["___ belt", ["SEAT", "BLACK", "TOOL", "ASTEROID"]],
+  ],
+  [
+    ["Bread spreads", ["JAM", "BUTTER", "HUMMUS", "PEANUT BUTTER"]],
+    ["Traffic", ["GRIDLOCK", "MERGE", "HONK", "DETOUR"]],
+    ["Guitar parts", ["FRET", "NECK", "PICK", "STRING"]],
+    ["Bottle ___", ["CAP", "ROCKET", "SERVICE", "OPENER"]],
+  ],
+  [
+    ["Loud animals", ["ROOSTER", "HOWLER MONKEY", "LION", "PARROT"]],
+    ["Bank words", ["DEPOSIT", "LOAN", "TELLER", "VAULT"]],
+    ["Kinds of jeans", ["SKINNY", "BAGGY", "BOOTCUT", "RIPPED"]],
+    ["___ vault", ["POLE", "BANK", "SKY", "TIME"]],
+  ],
+  [
+    ["Egg dishes", ["OMELET", "FRITTATA", "QUICHE", "BENEDICT"]],
+    ["Kinds of hats", ["BEANIE", "FEDORA", "BERET", "VISOR"]],
+    ["TV remote buttons", ["MUTE", "VOLUME", "MENU", "INPUT"]],
+    ["___ ranger", ["POWER", "PARK", "LONE", "TEXAS"]],
+  ],
+  [
+    ["Playground", ["SWING", "SLIDE", "SEESAW", "MONKEY BARS"]],
+    ["Wrestling moves", ["SUPLEX", "PIN", "HEADLOCK", "BODY SLAM"]],
+    ["Lemon things", ["LEMONADE", "ZEST", "SOUR", "CITRUS"]],
+    ["___ ball", ["CANNON", "CRYSTAL", "CURVE", "DISCO"]],
+  ],
+  [
+    ["Shades of red", ["CRIMSON", "SCARLET", "RUBY", "MAROON"]],
+    ["Ivy League schools", ["PRINCETON", "CORNELL", "BROWN", "DARTMOUTH"]],
+    ["Gymnastics", ["VAULT", "BEAM", "FLOOR", "RINGS"]],
+    ["Things you can tie", ["SHOELACE", "KNOT", "TIE", "SCORE"]],
+  ],
+  [
+    ["Fairy tale characters", ["CINDERELLA", "RAPUNZEL", "PINOCCHIO", "GRETEL"]],
+    ["Hospital", ["NURSE", "SCRUBS", "IV", "GURNEY"]],
+    ["Root vegetables", ["TURNIP", "RADISH", "PARSNIP", "YAM"]],
+    ["___ wave", ["HEAT", "MICRO", "TIDAL", "BRAIN"]],
+  ],
+  [
+    ["Ways to cook", ["STEAM", "SAUTE", "BROIL", "SIMMER"]],
+    ["Amusement park", ["COASTER", "FUNNEL CAKE", "MASCOT", "FAST PASS"]],
+    ["Volleyball", ["SPIKE", "SERVE", "DIG", "SET"]],
+    ["Tennis ___", ["ELBOW", "SHOES", "COURT", "RACKET"]],
+  ],
+  [
+    ["Fruit desserts", ["COBBLER", "CRUMBLE", "TART", "SORBET"]],
+    ["Popular dog names", ["MAX", "BELLA", "CHARLIE", "LUNA"]],
+    ["Spelling bee", ["WORD", "DEFINITION", "ORIGIN", "SENTENCE"]],
+    ["___ Max", ["MAD", "AIR", "HBO", "PEPSI"]],
+  ],
+  [
+    ["Minecraft", ["CREEPER", "DIAMOND", "PICKAXE", "ENDERMAN"]],
+    ["Pasta sauces", ["MARINARA", "ALFREDO", "PESTO", "BOLOGNESE"]],
+    ["Things that are pointy", ["NEEDLE", "THORN", "SPEAR", "TACK"]],
+    ["___ tag", ["PRICE", "LASER", "NAME", "DOG"]],
+  ],
+  [
+    ["Piano words", ["KEY", "PEDAL", "CHORD", "OCTAVE"]],
+    ["Fish words", ["FIN", "GILL", "SCALE", "TAIL"]],
+    ["Deli meats", ["HAM", "SALAMI", "TURKEY", "PASTRAMI"]],
+    ["___ table", ["POOL", "TIME", "PERIODIC", "PICNIC"]],
+  ],
+  [
+    ["Girl names in songs", ["JOLENE", "ROXANNE", "LAYLA", "DELILAH"]],
+    ["Bug parts", ["ANTENNA", "WING", "STINGER", "THORAX"]],
+    ["Moving day", ["BOXES", "TAPE", "TRUCK", "BUBBLE WRAP"]],
+    ["Radio ___", ["STATION", "SILENCE", "HEAD", "WAVE"]],
+  ],
+  [
+    ["Fast cars", ["FERRARI", "LAMBORGHINI", "PORSCHE", "BUGATTI"]],
+    ["Hot beverages", ["COCOA", "CIDER", "CHAI", "MATCHA"]],
+    ["Turtle words", ["SHELL", "SLOW", "NINJA", "SEA"]],
+    ["___ box", ["JUKE", "MAIL", "SAND", "LUNCH"]],
+  ],
+  [
+    ["Popcorn flavors", ["BUTTER", "CARAMEL", "KETTLE", "CHEDDAR"]],
+    ["Track & field gear", ["SPIKES", "BATON", "STARTING BLOCK", "STOPWATCH"]],
+    ["Owl sounds & traits", ["HOOT", "WISE", "NOCTURNAL", "TALON"]],
+    ["___ drop", ["MIC", "GUM", "EYE", "RAIN"]],
+  ],
+  [
+    ["Sports with rackets", ["TENNIS", "SQUASH", "BADMINTON", "PICKLEBALL"]],
+    ["Gourds", ["PUMPKIN", "ZUCCHINI", "CUCUMBER", "MELON"]],
+    ["Alarm clock", ["SNOOZE", "BUZZ", "WAKE", "RING"]],
+    ["___ court", ["FOOD", "SUPREME", "KANGAROO", "ROYAL"]],
+  ],
+  [
+    ["Things you plug in", ["LAMP", "TOASTER", "CHARGER", "FAN"]],
+    ["Celebrity chefs", ["RAMSAY", "FIERI", "BOURDAIN", "CHILD"]],
+    ["Big numbers", ["MILLION", "BILLION", "TRILLION", "GOOGOL"]],
+    ["___ fan", ["CEILING", "SUPER", "BOX", "DIE-HARD"]],
+  ],
+  [
+    ["Kinds of stores", ["GROCERY", "THRIFT", "HARDWARE", "CONVENIENCE"]],
+    ["Bee things", ["HIVE", "HONEY", "QUEEN", "POLLEN"]],
+    ["Skateboarding", ["DECK", "TRUCKS", "GRIP TAPE", "HALFPIPE"]],
+    ["___ bee", ["SPELLING", "BUMBLE", "WORKER", "BUSY"]],
+  ],
+  [
+    ["Movie snacks", ["POPCORN", "NACHOS", "SODA", "PRETZEL"]],
+    ["Ghost words", ["BOO", "HAUNT", "SPOOKY", "SHEET"]],
+    ["Sneakers", ["JORDANS", "DUNKS", "AIR FORCE", "YEEZY"]],
+    ["___ sheet", ["SPREAD", "CHEAT", "BALANCE", "COOKIE"]],
+  ],
+  [
+    ["Water sports", ["SURFING", "KAYAKING", "WATER POLO", "WAKEBOARDING"]],
+    ["Hamburger chains", ["MCDONALDS", "WENDYS", "FIVE GUYS", "SHAKE SHACK"]],
+    ["Bear types", ["POLAR", "GRIZZLY", "PANDA", "KOALA"]],
+    ["___ panda", ["KUNG FU", "RED", "GIANT", "TRASH"]],
+  ],
+  [
+    ["Rhymes with 'cat'", ["BAT", "HAT", "MAT", "RAT"]],
+    ["Ways to cook potatoes", ["MASHED", "BAKED", "FRIES", "HASH BROWNS"]],
+    ["Spy words", ["AGENT", "GADGET", "DISGUISE", "MISSION"]],
+    ["___ hat", ["TOP", "HARD", "COWBOY", "BUCKET"]],
+  ],
+  [
+    ["Kinds of trucks", ["MONSTER", "FOOD", "GARBAGE", "SEMI"]],
+    ["Punctuation", ["COMMA", "PERIOD", "COLON", "DASH"]],
+    ["Football penalties", ["OFFSIDE", "HOLDING", "FALSE START", "FACE MASK"]],
+    ["___ mask", ["FACE", "SKI", "GAS", "SLEEP"]],
+  ],
+  [
+    ["Laundry items", ["SOCKS", "TOWEL", "SHEETS", "HOODIE"]],
+    ["Streaming words", ["BINGE", "EPISODE", "SEASON", "SPOILER"]],
+    ["Nature sounds", ["CHIRP", "RUSTLE", "BABBLE", "CRASH"]],
+    ["___ season", ["FLU", "OFF", "PRE", "HUNTING"]],
+  ],
+  [
+    ["Fingers", ["THUMB", "INDEX", "MIDDLE", "PINKY"]],
+    ["Cartoon dogs", ["SNOOPY", "SCOOBY", "PLUTO", "ODIE"]],
+    ["Waffle House", ["WAFFLE", "HASH BROWNS", "BOOTH", "JUKEBOX"]],
+    ["___ finger", ["FISH", "LADY", "BUTTER", "TRIGGER"]],
+  ],
+  [
+    ["Homework excuses", ["DOG", "PRINTER", "WIFI", "FORGOT"]],
+    ["Volcano words", ["LAVA", "ERUPT", "CRATER", "MAGMA"]],
+    ["Sneaker parts", ["SOLE", "LACE", "TONGUE", "HEEL"]],
+    ["___ dog", ["CORN", "HOT", "TOP", "HANG"]],
+  ],
+  [
+    ["Grilling", ["RIBS", "BRISKET", "SKEWER", "CHARCOAL"]],
+    ["Famous Toms", ["HANKS", "CRUISE", "BRADY", "HOLLAND"]],
+    ["Smells", ["AROMA", "WHIFF", "SCENT", "STENCH"]],
+    ["___ brady", ["TOM", "BUNCH", "WAYNE", "BILL"]],
+  ],
+  [
+    ["Kitchen cleaning", ["SPONGE", "DISH SOAP", "SCRUB", "RINSE"]],
+    ["Things you can spike", ["VOLLEYBALL", "HAIR", "PUNCH", "FOOTBALL"]],
+    ["Pretend", ["FAKE", "PHONY", "BLUFF", "POSE"]],
+    ["___ room", ["BATH", "MUSH", "ESCAPE", "LOCKER"]],
+  ],
+  [
+    ["Hiking", ["TRAIL", "SUMMIT", "BACKPACK", "COMPASS"]],
+    ["Pig words", ["OINK", "SNOUT", "TROUGH", "HAM"]],
+    ["Talk", ["CHAT", "GAB", "YAP", "BLAB"]],
+    ["___ pig", ["GUINEA", "PIGGY", "TEACUP", "WART"]],
+  ],
+  [
+    ["Things in a garage", ["CAR", "TOOLBOX", "LAWNMOWER", "BIKE"]],
+    ["Drinks at a party", ["PUNCH", "SODA", "SELTZER", "LEMONADE"]],
+    ["Boxing", ["RING", "GLOVES", "KNOCKOUT", "ROUND"]],
+    ["___ fight", ["FOOD", "PILLOW", "SNOWBALL", "WATER"]],
+  ],
+  [
+    ["Skin care", ["MOISTURIZER", "SUNSCREEN", "TONER", "SERUM"]],
+    ["Tiny animals", ["MOUSE", "SHREW", "HUMMINGBIRD", "GECKO"]],
+    ["Things you can grow", ["BEARD", "GARDEN", "TALLER", "BUSINESS"]],
+    ["___ mouse", ["MICKEY", "COMPUTER", "CHURCH", "MINNIE"]],
+  ],
+  [
+    ["Colors of M&Ms", ["RED", "GREEN", "BLUE", "ORANGE"]],
+    ["Dance floor", ["DJ", "STROBE", "SPEAKER", "DISCO BALL"]],
+    ["Camping foods", ["SMORES", "HOT DOG", "TRAIL MIX", "BEANS"]],
+    ["Blue ___", ["JAY", "WHALE", "CHEESE", "MOON"]],
+  ],
+  [
+    ["Things a phone does", ["RING", "BUZZ", "CHARGE", "UPDATE"]],
+    ["Farm buildings", ["BARN", "SILO", "COOP", "STABLE"]],
+    ["Muscles", ["BICEP", "TRICEP", "QUAD", "GLUTE"]],
+    ["Baby animals", ["CALF", "FOAL", "CUB", "KID"]],
+  ],
+  [
+    ["Circus", ["ACROBAT", "JUGGLER", "TRAPEZE", "RINGMASTER"]],
+    ["Things that are sharp", ["KNIFE", "CACTUS", "CHEDDAR", "WIT"]],
+    ["Meteorologist words", ["FORECAST", "HUMIDITY", "FRONT", "RADAR"]],
+    ["___ tent", ["PUP", "CIRCUS", "OXYGEN", "BEACH"]],
+  ],
+  [
+    ["Shellfish", ["SHRIMP", "LOBSTER", "CRAB", "CLAM"]],
+    ["Rap slang", ["DRIP", "FLEX", "CAP", "BARS"]],
+    ["Water", ["TAP", "BOTTLED", "SPARKLING", "SPRING"]],
+    ["___ cap", ["ICE", "KNEE", "BOTTLE", "SNAP"]],
+  ],
+  [
+    ["Roblox games", ["ADOPT ME", "BLOX FRUITS", "BROOKHAVEN", "ARSENAL"]],
+    ["Ancient Egypt", ["PYRAMID", "PHARAOH", "MUMMY", "SPHINX"]],
+    ["Things in a first aid kit", ["BANDAGE", "GAUZE", "TWEEZERS", "ICE PACK"]],
+    ["___ kit", ["TOOL", "DRUM", "STARTER", "MEDIA"]],
+  ],
+  [
+    ["Oreos", ["DOUBLE STUF", "GOLDEN", "THINS", "MINT"]],
+    ["Constellations", ["ORION", "LEO", "BIG DIPPER", "CASSIOPEIA"]],
+    ["Guitar brands", ["FENDER", "GIBSON", "IBANEZ", "YAMAHA"]],
+    ["Aston ___", ["MARTIN", "VILLA", "UNIVERSITY", "KUTCHER"]],
+  ],
+  [
+    ["Study words", ["FLASHCARDS", "NOTES", "REVIEW", "QUIZ"]],
+    ["Ninja gear", ["SWORD", "SHURIKEN", "SMOKE BOMB", "MASK"]],
+    ["Weather warnings", ["TORNADO", "FLOOD", "BLIZZARD", "HURRICANE"]],
+    ["___ quiz", ["POP", "BUZZFEED", "TRIVIA", "MAP"]],
+  ],
+  [
+    ["Cookout", ["BURGERS", "COLESLAW", "WATERMELON", "CORN ON THE COB"]],
+    ["Famous Johns", ["LENNON", "CENA", "MAYER", "LEGEND"]],
+    ["Words for 'cool'", ["FIRE", "SICK", "DOPE", "LIT"]],
+    ["John ___ (fictional)", ["WICK", "SNOW", "MCCLANE", "DOE"]],
+  ],
+  [
+    ["Places to swim", ["LAKE", "POOL", "OCEAN", "RIVER"]],
+    ["Classic rock bands", ["QUEEN", "KISS", "RUSH", "BOSTON"]],
+    ["Bodies of water words", ["BAY", "GULF", "STRAIT", "LAGOON"]],
+    ["___ pool", ["CAR", "WHIRL", "DEAD", "KIDDIE"]],
+  ],
+  [
+    ["Bakery bread", ["BAGUETTE", "CIABATTA", "FOCACCIA", "BRIOCHE"]],
+    ["Balls", ["GOLF", "TENNIS", "BOWLING", "BEACH"]],
+    ["Frog words", ["RIBBIT", "LILY PAD", "TADPOLE", "LEAP"]],
+    ["___ leap", ["QUANTUM", "LEAP YEAR", "FROG", "GIANT"]],
+  ],
+  [
+    ["Sour candy", ["WARHEADS", "SOUR PATCH", "LEMONHEADS", "AIRHEADS"]],
+    ["Wedding roles", ["BRIDE", "GROOM", "USHER", "OFFICIANT"]],
+    ["Things you can pull", ["MUSCLE", "PRANK", "WEIGHT", "ALL-NIGHTER"]],
+    ["___ head", ["AIR", "FORE", "EGG", "BLOCK"]],
+  ],
+  [
+    ["Kinds of lettuce", ["ROMAINE", "ICEBERG", "ARUGULA", "BUTTERHEAD"]],
+    ["Snowboard tricks", ["GRAB", "SPIN", "FLIP", "SLIDE"]],
+    ["Iceberg associations", ["TITANIC", "TIP", "GLACIER", "ARCTIC"]],
+    ["Water ___", ["GUN", "PARK", "BOTTLE", "BALLOON"]],
+  ],
+  [
+    ["Nintendo consoles", ["SWITCH", "WII", "GAMECUBE", "DS"]],
+    ["Bird sounds", ["TWEET", "CAW", "COO", "SQUAWK"]],
+    ["Lights", ["LAMP", "LANTERN", "TORCH", "SCONCE"]],
+    ["Light ___", ["HOUSE", "BULB", "SABER", "YEAR"]],
+  ],
+  [
+    ["Spanish words everyone knows", ["HOLA", "GRACIAS", "AMIGO", "FIESTA"]],
+    ["Basketball courts", ["PAINT", "ARC", "BASELINE", "KEY"]],
+    ["Ninja Turtles", ["LEONARDO", "DONATELLO", "RAPHAEL", "MICHELANGELO"]],
+    ["Key ___", ["LIME", "CHAIN", "WEST", "BOARD"]],
+  ],
+  [
+    ["Cinema", ["PREMIERE", "SEQUEL", "CREDITS", "CAMEO"]],
+    ["Round foods", ["MEATBALL", "ORANGE", "BAGEL", "MACARON"]],
+    ["Bones", ["SKULL", "RIB", "FEMUR", "SPINE"]],
+    ["___ bone", ["FUNNY", "BACK", "WISH", "T"]],
+  ],
+  [
+    ["Fireworks", ["SPARKLER", "ROCKET", "FOUNTAIN", "FINALE"]],
+    ["Things you can drop", ["BEAT", "HINT", "MIC", "CLASS"]],
+    ["Nail salon", ["POLISH", "FILE", "CUTICLE", "GEL"]],
+    ["___ polish", ["NAIL", "SHOE", "FURNITURE", "SILVER"]],
+  ],
+  [
+    ["Brunch", ["MIMOSA", "EGGS", "PANCAKES", "HASH"]],
+    ["Bad luck", ["LADDER", "BLACK CAT", "MIRROR", "THIRTEEN"]],
+    ["Tech", ["APP", "CLOUD", "SERVER", "PIXEL"]],
+    ["___ cat", ["COPY", "FAT", "TOM", "SCAREDY"]],
+  ],
+];
+</script>
+<script>/* Connections — daily puzzle from puzzles.js, progress saved per puzzle. */
+(() => {
+  "use strict";
+  const $ = (s) => document.querySelector(s);
+  const COLORS = ["y", "g", "b", "p"];
+  const EMOJI = { y: "🟨", g: "🟩", b: "🟦", p: "🟪" };
+  const N = PUZZLES.length;
+  const shuffle = (a) => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const lsGet = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k) || "null"); return v == null ? d : v; } catch { return d; } };
+  const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* ignore */ } };
+
+  // ---------- which puzzle ----------
+  // Endless: every player gets their own shuffled sequence through the bank.
+  // When the sequence runs out it's reshuffled and appended, so the puzzle
+  // number just keeps climbing. Progress is stored per position, not per
+  // puzzle, so a repeat much later starts fresh.
+  let seq = lsGet("connections:seq", null);
+  if (!Array.isArray(seq) || seq.length === 0) { seq = shuffle([...Array(N).keys()]); lsSet("connections:seq", seq); }
+  let cursor = Number(lsGet("connections:cursor", 0)) || 0;
+  while (cursor >= seq.length) {
+    const more = shuffle([...Array(N).keys()]);
+    // don't repeat the puzzle you literally just played
+    if (N > 1 && more[0] === seq[seq.length - 1]) [more[0], more[1]] = [more[1], more[0]];
+    seq = seq.concat(more); lsSet("connections:seq", seq);
+  }
+  const params = new URLSearchParams(location.search);
+  const debugIdx = params.has("p") ? Number(params.get("p")) : NaN;
+  const isDebug = Number.isInteger(debugIdx) && debugIdx >= 0 && debugIdx < N;
+  const idx = isDebug ? debugIdx : seq[cursor];
+  const number = cursor + 1;                       // what the player sees
+  const puzzle = PUZZLES[idx];
+  const KEY = isDebug ? `connections:dbg:${idx}` : `connections:v2:${cursor}`;
+  const solvedCount = () => Number(lsGet("connections:solved", 0)) || 0;
+  const advance = () => { if (!isDebug) lsSet("connections:cursor", cursor + 1); location.hash = "#connections"; location.reload(); };
+
+  // ---------- state ----------
+  const st = { selected: [], solved: [], attempts: [], mistakes: 0, done: false, order: [] };
+  const words = puzzle.flatMap(([, ws], gi) => ws.map((w) => ({ w, gi })));
+  const groupOf = (w) => words.find((x) => x.w === w).gi;
+
+  function save() { lsSet(KEY, { solved: st.solved, attempts: st.attempts, mistakes: st.mistakes, done: st.done, order: st.order, counted: !!st.counted }); }
+  function load() {
+    try {
+      const s = JSON.parse(localStorage.getItem(KEY) || "null");
+      if (!s) return false;
+      Object.assign(st, { solved: s.solved || [], attempts: s.attempts || [], mistakes: s.mistakes || 0, done: !!s.done, order: s.order || [], counted: !!s.counted });
+      return true;
+    } catch { return false; }
+  }
+
+  // ---------- render ----------
+  const grid = $("#grid"), solvedEl = $("#solved");
+
+  function renderSolved() {
+    solvedEl.innerHTML = "";
+    for (const gi of st.solved) {
+      const [title, ws] = puzzle[gi];
+      const el = document.createElement("div");
+      el.className = `group ${COLORS[gi]}`;
+      el.innerHTML = `<b>${title}</b><span>${ws.join(", ")}</span>`;
+      solvedEl.appendChild(el);
+    }
+  }
+
+  function renderGrid() {
+    grid.innerHTML = "";
+    const remaining = st.order.filter((w) => !st.solved.includes(groupOf(w)));
+    for (const w of remaining) {
+      const b = document.createElement("button");
+      b.className = "tile" + (st.selected.includes(w) ? " selected" : "");
+      b.textContent = w;
+      b.dataset.w = w;
+      b.onclick = () => toggle(w);
+      grid.appendChild(b);
+    }
+    updateButtons();
+  }
+
+  function renderDots() {
+    [...$("#dots").children].forEach((d, i) => d.classList.toggle("gone", i >= 4 - st.mistakes));
+  }
+
+  function updateButtons() {
+    $("#btn-submit").disabled = st.selected.length !== 4 || st.done;
+    $("#btn-deselect").disabled = st.selected.length === 0 || st.done;
+    $("#btn-shuffle").disabled = st.done;
+  }
+
+  function toggle(w) {
+    if (st.done) return;
+    const i = st.selected.indexOf(w);
+    if (i >= 0) st.selected.splice(i, 1);
+    else if (st.selected.length < 4) st.selected.push(w);
+    else return;
+    grid.querySelectorAll(".tile").forEach((t) => t.classList.toggle("selected", st.selected.includes(t.dataset.w)));
+    updateButtons();
+  }
+
+  let toastTimer = 0;
+  function toast(msg, ms = 1600) {
+    const t = $("#toast"); t.textContent = msg; t.classList.remove("hidden");
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.add("hidden"), ms);
+  }
+
+  // ---------- submit ----------
+  let busy = false;
+  async function submit() {
+    if (busy || st.selected.length !== 4 || st.done) return;
+    busy = true;
+    const tiles = st.selected.map((w) => grid.querySelector(`[data-w="${CSS.escape(w)}"]`));
+    // bounce in order like the original
+    for (const t of tiles) { t.classList.add("bounce"); await wait(90); }
+    await wait(260);
+    tiles.forEach((t) => t.classList.remove("bounce"));
+
+    const groups = st.selected.map(groupOf);
+    st.attempts.push(groups.map((gi) => COLORS[gi]));
+    const counts = {}; for (const gi of groups) counts[gi] = (counts[gi] || 0) + 1;
+    const best = Math.max(...Object.values(counts));
+
+    if (best === 4) {
+      const gi = groups[0];
+      tiles.forEach((t) => t.classList.add("fade"));
+      await wait(220);
+      st.solved.push(gi);
+      st.selected = [];
+      renderSolved(); renderGrid();
+      if (st.solved.length === 4) finish(true);
+    } else {
+      // already guessed this exact set?
+      const key = [...st.selected].sort().join("|");
+      if (st.prevSets && st.prevSets.includes(key)) {
+        st.attempts.pop();
+        toast("Already guessed!");
+        busy = false;
+        return;
+      }
+      (st.prevSets = st.prevSets || []).push(key);
+      if (best === 3) toast("One away…");
+      tiles.forEach((t) => t.classList.add("shake"));
+      await wait(420);
+      tiles.forEach((t) => t.classList.remove("shake"));
+      st.mistakes++;
+      renderDots();
+      if (st.mistakes >= 4) {
+        await wait(300);
+        finish(false);
+      }
+    }
+    save();
+    busy = false;
+  }
+
+  async function finish(won) {
+    st.done = true;
+    updateButtons();
+    if (won && !st.counted) { st.counted = true; lsSet("connections:solved", solvedCount() + 1); }
+    if (!won) {
+      toast("Next time!", 1400);
+      // reveal the rest, one group at a time
+      for (let gi = 0; gi < 4; gi++) {
+        if (st.solved.includes(gi)) continue;
+        await wait(650);
+        st.solved.push(gi); st.selected = [];
+        renderSolved(); renderGrid();
+      }
+    }
+    save();
+    await wait(700);
+    showResults(won);
+  }
+
+  function showResults(won) {
+    const m = st.mistakes;
+    const title = !won ? "Next Time!" : m === 0 ? "Perfect!" : m === 1 ? "Great!" : m === 2 ? "Solid!" : "Phew!";
+    $("#result-title").textContent = title;
+    $("#result-sub").textContent = `Puzzle #${number} · ${won ? `${m} mistake${m === 1 ? "" : "s"}` : "out of mistakes"} · ${solvedCount()} solved`;
+    $("#result-grid").innerHTML = st.attempts.map((a) => `<div>${a.map((c) => EMOJI[c]).join("")}</div>`).join("");
+    $("#modal").classList.remove("hidden");
+  }
+
+  function shareText() {
+    const head = `Daytona Connections #${number}`;
+    return `${head}\n${st.attempts.map((a) => a.map((c) => EMOJI[c]).join("")).join("\n")}`;
+  }
+
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+  // ---------- wire up ----------
+  $("#btn-submit").onclick = submit;
+  $("#btn-deselect").onclick = () => { st.selected = []; renderGrid(); };
+  $("#btn-shuffle").onclick = () => { shuffle(st.order); renderGrid(); save(); };
+  $("#btn-help").onclick = () => $("#help").classList.remove("hidden");
+  document.querySelectorAll("[data-close]").forEach((b) => { b.onclick = () => b.closest(".modal").classList.add("hidden"); });
+  document.querySelectorAll(".modal").forEach((m) => { m.addEventListener("click", (e) => { if (e.target === m) m.classList.add("hidden"); }); });
+  $("#btn-share").onclick = async () => {
+    const text = shareText();
+    try {
+      if (navigator.share) await navigator.share({ text });
+      else { await navigator.clipboard.writeText(text); toast("Copied to clipboard"); }
+    } catch { /* cancelled */ }
+  };
+  $("#btn-another").onclick = advance;
+  $("#btn-skip").onclick = advance;
+  $("#btn-random").onclick = () => {
+    // swap a different random puzzle into this slot and start it fresh
+    let r = idx; while (r === idx && N > 1) r = Math.floor(Math.random() * N);
+    if (!isDebug) { seq[cursor] = r; lsSet("connections:seq", seq); try { localStorage.removeItem(KEY); } catch { /* ignore */ } }
+    location.hash = "#connections"; location.reload();
+  };
+
+  // ---------- boot ----------
+  $("#puzzle-label").textContent = `Puzzle #${number}${solvedCount() ? ` · ${solvedCount()} solved` : ""}`;
+  if (!load() || st.order.length !== 16) { st.order = shuffle(words.map((x) => x.w)); save(); }
+  renderSolved(); renderGrid(); renderDots();
+  if (st.done) showResults(st.solved.length === 4 && st.mistakes < 4);
+})();
+</script>
+<script>/* Flappy Bird — faithful clone, no assets. Everything is drawn on a 288x512
+   canvas and scaled to the window. Physics are tuned to the original's feel
+   (gravity 0.25 px/frame², flap -4.6 px/frame, scroll 2 px/frame at 60 fps),
+   expressed per second so any refresh rate plays the same. */
+(() => {
+  "use strict";
+
+  // ---------- constants ----------
+  const W = 288, H = 512;
+  const GROUND_H = 112;
+  const GROUND_Y = H - GROUND_H;
+  const SCROLL = 120;          // px/s  (2 px/frame)
+  const GRAVITY = 900;         // px/s² (0.25 px/frame²)
+  const FLAP_V = -276;         // px/s  (-4.6 px/frame)
+  const MAX_FALL = 600;        // px/s
+  const PIPE_W = 52;
+  const PIPE_GAP = 98;
+  const PIPE_SPACING = 172;    // horizontal distance between pipes
+  const BIRD_X = 70;
+  const BIRD_W = 34, BIRD_H = 24;
+  const MIN_PIPE_TOP = 70;     // shortest top pipe
+  const BEST_KEY = "flappy:best";
+
+  // ---------- canvas / scaling ----------
+  const canvas = document.getElementById("game");
+  const ctx = canvas.getContext("2d");
+  let scale = 1;
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 3);
+    scale = Math.min(window.innerWidth / W, window.innerHeight / H);
+    canvas.style.width = `${Math.floor(W * scale)}px`;
+    canvas.style.height = `${Math.floor(H * scale)}px`;
+    canvas.width = Math.floor(W * scale * dpr);
+    canvas.height = Math.floor(H * scale * dpr);
+    ctx.setTransform(scale * dpr, 0, 0, scale * dpr, 0, 0);
+    ctx.imageSmoothingEnabled = false;
+  }
+  window.addEventListener("resize", resize);
+  resize();
+
+  // ---------- audio (synthesized) ----------
+  let actx = null;
+  function audio() {
+    if (!actx) { try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch { actx = null; } }
+    if (actx && actx.state === "suspended") actx.resume();
+    return actx;
+  }
+  function tone(freq, dur, type = "square", gain = 0.12, slideTo = null, when = 0) {
+    const a = audio(); if (!a) return;
+    const o = a.createOscillator(), g = a.createGain();
+    o.type = type; o.frequency.setValueAtTime(freq, a.currentTime + when);
+    if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, a.currentTime + when + dur);
+    g.gain.setValueAtTime(gain, a.currentTime + when);
+    g.gain.exponentialRampToValueAtTime(0.0001, a.currentTime + when + dur);
+    o.connect(g).connect(a.destination);
+    o.start(a.currentTime + when); o.stop(a.currentTime + when + dur + 0.02);
+  }
+  function noise(dur, gain = 0.2, when = 0) {
+    const a = audio(); if (!a) return;
+    const buf = a.createBuffer(1, a.sampleRate * dur, a.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / d.length);
+    const src = a.createBufferSource(); src.buffer = buf;
+    const g = a.createGain(); g.gain.setValueAtTime(gain, a.currentTime + when);
+    g.gain.exponentialRampToValueAtTime(0.0001, a.currentTime + when + dur);
+    const f = a.createBiquadFilter(); f.type = "lowpass"; f.frequency.value = 900;
+    src.connect(f).connect(g).connect(a.destination); src.start(a.currentTime + when);
+  }
+  const sfx = {
+    wing: () => { tone(420, 0.08, "sine", 0.08, 900); },
+    point: () => { tone(1046, 0.07, "square", 0.07); tone(1568, 0.12, "square", 0.07, null, 0.07); },
+    hit: () => { noise(0.18, 0.35); tone(160, 0.18, "square", 0.15, 60); },
+    die: () => { tone(500, 0.35, "square", 0.08, 120, 0.15); },
+    swoosh: () => { noise(0.22, 0.12); },
+  };
+
+  // ---------- state ----------
+  const S = { READY: 0, PLAY: 1, DEAD: 2 };
+  const g = {
+    state: S.READY,
+    night: false,
+    birdY: 0, birdV: 0, birdRot: 0, wing: 0, wingT: 0,
+    pipes: [],       // { x, top, scored }
+    groundX: 0, bgX: 0,
+    score: 0, best: (() => { try { return Number(localStorage.getItem(BEST_KEY) || 0); } catch { return 0; } })(),
+    flash: 0, panelT: 0, deadT: 0, newBest: false,
+    t: 0, readyBob: 0,
+    shake: 0,
+    tapFlash: 0,
+  };
+  window.FLAPPY = g; // for poking at from the console
+
+  function reset() {
+    g.state = S.READY;
+    g.night = Math.random() < 0.35;
+    g.birdY = GROUND_Y / 2 - 20; g.birdV = 0; g.birdRot = 0;
+    g.pipes = []; g.score = 0; g.flash = 0; g.panelT = 0; g.deadT = 0; g.newBest = false; g.shake = 0;
+  }
+
+  function spawnPipe(x) {
+    const range = GROUND_Y - PIPE_GAP - MIN_PIPE_TOP - 40;
+    const top = MIN_PIPE_TOP + Math.random() * range;
+    g.pipes.push({ x, top, scored: false });
+  }
+
+  function flap() {
+    if (g.state === S.READY) {
+      g.state = S.PLAY;
+      g.pipes = [];
+      spawnPipe(W + 60);
+    }
+    if (g.state === S.PLAY) {
+      g.birdV = FLAP_V;
+      g.wingT = 0;
+      sfx.wing();
+    } else if (g.state === S.DEAD && g.panelT >= 1) {
+      sfx.swoosh();
+      reset();
+    }
+  }
+
+  function die() {
+    if (g.state !== S.PLAY) return;
+    g.state = S.DEAD;
+    g.flash = 1; g.shake = 1; g.deadT = 0; g.panelT = 0;
+    sfx.hit();
+    if (navigator.vibrate) navigator.vibrate(60);
+    if (g.score > g.best) { g.best = g.score; g.newBest = true; try { localStorage.setItem(BEST_KEY, String(g.best)); } catch { /* storage blocked */ } }
+  }
+
+  // ---------- update ----------
+  function update(dt) {
+    g.t += dt;
+    g.tapFlash = Math.max(0, g.tapFlash - dt * 4);
+
+    if (g.state !== S.DEAD) {
+      g.groundX = (g.groundX - SCROLL * dt) % 24;
+      g.bgX = (g.bgX - SCROLL * 0.25 * dt) % W;
+    }
+
+    if (g.state === S.READY) {
+      g.readyBob += dt * 6;
+      g.birdY = GROUND_Y / 2 - 20 + Math.sin(g.readyBob) * 5;
+      g.wingT += dt;
+      g.wing = Math.floor(g.wingT * 10) % 3;
+      g.birdRot = 0;
+      return;
+    }
+
+    if (g.state === S.PLAY) {
+      g.birdV = Math.min(MAX_FALL, g.birdV + GRAVITY * dt);
+      g.birdY += g.birdV * dt;
+      g.wingT += dt;
+      g.wing = g.birdV < 0 ? Math.floor(g.wingT * 18) % 3 : 1;
+      // tilt: nose up right after a flap, then rotate down as it falls
+      const target = g.birdV < 0 ? -0.45 : Math.min(1.45, (g.birdV / MAX_FALL) * 1.9);
+      g.birdRot += (target - g.birdRot) * Math.min(1, dt * (g.birdV < 0 ? 18 : 6));
+
+      for (const p of g.pipes) p.x -= SCROLL * dt;
+      if (g.pipes.length && g.pipes[0].x < -PIPE_W) g.pipes.shift();
+      const last = g.pipes[g.pipes.length - 1];
+      if (!last || last.x < W - PIPE_SPACING + PIPE_W) spawnPipe((last ? last.x : W) + PIPE_SPACING);
+
+      // scoring
+      for (const p of g.pipes) {
+        if (!p.scored && p.x + PIPE_W < BIRD_X) { p.scored = true; g.score++; sfx.point(); }
+      }
+
+      // collisions (hitbox slightly inside the sprite)
+      const bx = BIRD_X - BIRD_W / 2 + 3, by = g.birdY - BIRD_H / 2 + 3, bw = BIRD_W - 6, bh = BIRD_H - 6;
+      if (by + bh >= GROUND_Y) { g.birdY = GROUND_Y - BIRD_H / 2; die(); return; }
+      if (by < -30) { g.birdY = -30 + BIRD_H / 2; g.birdV = 0; }
+      for (const p of g.pipes) {
+        if (bx + bw > p.x && bx < p.x + PIPE_W) {
+          if (by < p.top || by + bh > p.top + PIPE_GAP) { die(); return; }
+        }
+      }
+      return;
+    }
+
+    // DEAD: bird drops to the ground, then the panel slides in
+    g.deadT += dt;
+    g.flash = Math.max(0, g.flash - dt * 5);
+    g.shake = Math.max(0, g.shake - dt * 4);
+    if (g.birdY < GROUND_Y - BIRD_H / 2) {
+      g.birdV = Math.min(MAX_FALL, g.birdV + GRAVITY * dt);
+      g.birdY = Math.min(GROUND_Y - BIRD_H / 2, g.birdY + g.birdV * dt);
+      g.birdRot = Math.min(1.5, g.birdRot + dt * 6);
+      if (g.birdY >= GROUND_Y - BIRD_H / 2 && g.deadT > 0.1) sfx.die();
+    }
+    if (g.deadT > 0.6) g.panelT = Math.min(1, g.panelT + dt * 3);
+  }
+
+  // ---------- drawing helpers ----------
+  const px = (x, y, w, h, c) => { ctx.fillStyle = c; ctx.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h)); };
+
+  function drawText(text, x, y, size, align = "center", fill = "#fff", stroke = "#543847", lw = 3) {
+    ctx.font = `bold ${size}px "Press Start 2P", "Courier New", monospace`;
+    ctx.textAlign = align; ctx.textBaseline = "top";
+    ctx.lineJoin = "round"; ctx.lineWidth = lw; ctx.strokeStyle = stroke;
+    ctx.strokeText(text, x, y);
+    ctx.fillStyle = fill; ctx.fillText(text, x, y);
+  }
+
+  // Big score digits, Flappy style: white with dark outline and a drop shadow.
+  function drawScore(n, cx, y, size = 36) {
+    const s = String(n);
+    ctx.font = `bold ${size}px "Press Start 2P", "Courier New", monospace`;
+    ctx.textAlign = "center"; ctx.textBaseline = "top"; ctx.lineJoin = "round";
+    ctx.lineWidth = 5; ctx.strokeStyle = "#543847"; ctx.strokeText(s, cx, y + 2);
+    ctx.fillStyle = "#543847"; ctx.fillText(s, cx, y + 2);
+    ctx.lineWidth = 4; ctx.strokeStyle = "#543847"; ctx.strokeText(s, cx, y);
+    ctx.fillStyle = "#fff"; ctx.fillText(s, cx, y);
+  }
+
+  function drawBackground() {
+    const night = g.night;
+    // sky
+    const sky = ctx.createLinearGradient(0, 0, 0, GROUND_Y);
+    if (night) { sky.addColorStop(0, "#0a1b3f"); sky.addColorStop(1, "#1e3a72"); }
+    else { sky.addColorStop(0, "#4ec0ca"); sky.addColorStop(1, "#70c5ce"); }
+    ctx.fillStyle = sky; ctx.fillRect(0, 0, W, GROUND_Y);
+    if (night) {
+      ctx.fillStyle = "#fff";
+      for (let i = 0; i < 40; i++) { const sx = (i * 97 + 13) % W, sy = (i * 53 + 7) % (GROUND_Y - 160); const tw = 0.5 + ((Math.sin(g.t * 2 + i) + 1) / 2) * 0.5; ctx.globalAlpha = tw; ctx.fillRect(sx, sy, 2, 2); }
+      ctx.globalAlpha = 1;
+    }
+    // far city + trees strip, scrolling slowly
+    const ox = ((g.bgX % W) + W) % W;
+    for (const dx of [-W, 0]) drawCity(ox + dx, night);
+  }
+
+  function drawCity(x0, night) {
+    const cityY = GROUND_Y - 80;
+    // clouds/bushes band
+    ctx.fillStyle = night ? "#2d4f84" : "#dff5e6";
+    for (let i = 0; i < 10; i++) {
+      const cx = x0 + i * 30 + 10, r = 14 + (i % 3) * 4;
+      ctx.beginPath(); ctx.arc(cx, cityY + 45, r, Math.PI, 0); ctx.fill();
+    }
+    px(x0, cityY + 45, W, 35, night ? "#2d4f84" : "#dff5e6");
+    // buildings
+    ctx.fillStyle = night ? "#3a5f96" : "#e2f4e0";
+    const heights = [26, 40, 18, 48, 30, 22, 44, 16, 36, 28, 20, 42];
+    let bx = x0;
+    for (let i = 0; i < heights.length; i++) {
+      const bw = 20 + (i % 3) * 4, bh = heights[i];
+      ctx.fillStyle = night ? "#3a5f96" : "#e2f4e0";
+      ctx.fillRect(bx, cityY + 46 - bh, bw, bh);
+      // windows
+      ctx.fillStyle = night ? "#ffe89a" : "#c8e8d0";
+      for (let wy = cityY + 50 - bh; wy < cityY + 40; wy += 6) for (let wx = bx + 3; wx < bx + bw - 3; wx += 6) if ((wx + wy) % 5 !== 0) ctx.fillRect(wx, wy, 2, 3);
+      bx += bw + 4;
+    }
+    // trees
+    ctx.fillStyle = night ? "#2f7d4f" : "#8fd47a";
+    for (let i = 0; i < 14; i++) { const tx = x0 + i * 21 + 6; ctx.beginPath(); ctx.arc(tx, cityY + 66, 9, Math.PI, 0); ctx.fill(); }
+    px(x0, cityY + 66, W, 14, night ? "#2f7d4f" : "#8fd47a");
+  }
+
+  function drawGround() {
+    px(0, GROUND_Y, W, GROUND_H, "#ded895");
+    px(0, GROUND_Y, W, 2, "#543847");
+    px(0, GROUND_Y + 2, W, 10, "#73bf2e");
+    // striped edge
+    for (let x = g.groundX - 24; x < W + 24; x += 24) {
+      ctx.fillStyle = "#9be15d"; ctx.beginPath();
+      ctx.moveTo(x, GROUND_Y + 2); ctx.lineTo(x + 12, GROUND_Y + 2); ctx.lineTo(x + 6, GROUND_Y + 12); ctx.lineTo(x - 6, GROUND_Y + 12); ctx.fill();
+    }
+    px(0, GROUND_Y + 12, W, 2, "#5c9a2a");
+    px(0, GROUND_Y + 14, W, 3, "#e3d69c");
+    // dirt texture
+    ctx.fillStyle = "#d3c983";
+    for (let x = g.groundX - 24; x < W + 24; x += 24) { ctx.fillRect(x + 4, GROUND_Y + 26, 8, 3); ctx.fillRect(x + 14, GROUND_Y + 40, 6, 3); ctx.fillRect(x + 2, GROUND_Y + 60, 10, 3); ctx.fillRect(x + 16, GROUND_Y + 80, 7, 3); }
+  }
+
+  function drawPipe(x, top) {
+    const body = "#73bf2e", light = "#9be15d", dark = "#558022", outline = "#543847";
+    const capH = 26, capOver = 2;
+    const pipeAt = (y, h, capY) => {
+      px(x, y, PIPE_W, h, body);
+      px(x + 3, y, 10, h, light);
+      px(x + PIPE_W - 10, y, 7, h, dark);
+      ctx.strokeStyle = outline; ctx.lineWidth = 2; ctx.strokeRect(x + 1, y, PIPE_W - 2, h);
+      // cap
+      px(x - capOver, capY, PIPE_W + capOver * 2, capH, body);
+      px(x - capOver + 3, capY, 12, capH, light);
+      px(x + PIPE_W + capOver - 10, capY, 7, capH, dark);
+      ctx.strokeRect(x - capOver + 1, capY + 1, PIPE_W + capOver * 2 - 2, capH - 2);
+    };
+    pipeAt(0, top - capH, top - capH);                       // top pipe, cap at bottom
+    const by = top + PIPE_GAP;
+    pipeAt(by + capH, GROUND_Y - by - capH, by);              // bottom pipe, cap at top
+  }
+
+  function drawBird(x, y, rot, wing) {
+    ctx.save();
+    ctx.translate(Math.round(x), Math.round(y));
+    ctx.rotate(rot);
+    const o = "#543847";
+    // body
+    ctx.fillStyle = "#f8d548"; ctx.strokeStyle = o; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.ellipse(0, 0, 16, 11, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    // belly
+    ctx.fillStyle = "#f6e6b0"; ctx.beginPath(); ctx.ellipse(-2, 5, 10, 5, 0, 0, Math.PI * 2); ctx.fill();
+    // wing (three frames)
+    ctx.fillStyle = "#f5c132"; ctx.strokeStyle = o;
+    ctx.beginPath();
+    if (wing === 0) ctx.ellipse(-6, -4, 8, 4, -0.5, 0, Math.PI * 2);
+    else if (wing === 1) ctx.ellipse(-6, 1, 8, 4, 0, 0, Math.PI * 2);
+    else ctx.ellipse(-6, 6, 8, 4, 0.5, 0, Math.PI * 2);
+    ctx.fill(); ctx.stroke();
+    // eye
+    ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.ellipse(7, -4, 6, 6, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = o; ctx.beginPath(); ctx.arc(9, -4, 2.2, 0, Math.PI * 2); ctx.fill();
+    // beak
+    ctx.fillStyle = "#f0552d";
+    ctx.beginPath(); ctx.moveTo(9, 1); ctx.lineTo(20, 3); ctx.lineTo(9, 6); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(9, 5); ctx.lineTo(19, 5); ctx.lineTo(9, 9); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawPanel(x, y, w, h) {
+    px(x, y, w, h, "#ded895");
+    ctx.strokeStyle = "#543847"; ctx.lineWidth = 2; ctx.strokeRect(x + 1, y + 1, w - 2, h - 2);
+    px(x + 4, y + 4, w - 8, h - 8, "#f0e4a8");
+    ctx.strokeStyle = "#b9a95f"; ctx.lineWidth = 1; ctx.strokeRect(x + 4.5, y + 4.5, w - 9, h - 9);
+  }
+
+  function drawMedal(cx, cy, score) {
+    let color = null, ring = null, label = "";
+    if (score >= 40) { color = "#e6f4f7"; ring = "#9fc7cf"; label = "PLAT"; }
+    else if (score >= 30) { color = "#f7d15c"; ring = "#c9a227"; label = "GOLD"; }
+    else if (score >= 20) { color = "#d8dde3"; ring = "#98a1ab"; label = "SILVER"; }
+    else if (score >= 10) { color = "#d8955b"; ring = "#a06a33"; label = "BRONZE"; }
+    if (!color) { ctx.fillStyle = "#dbd0a0"; ctx.beginPath(); ctx.arc(cx, cy, 22, 0, Math.PI * 2); ctx.fill(); return; }
+    ctx.fillStyle = ring; ctx.beginPath(); ctx.arc(cx, cy, 22, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = color; ctx.beginPath(); ctx.arc(cx, cy, 18, 0, Math.PI * 2); ctx.fill();
+    // little bird on the medal
+    ctx.fillStyle = ring; ctx.beginPath(); ctx.ellipse(cx, cy, 9, 6, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = color; ctx.beginPath(); ctx.arc(cx + 4, cy - 2, 2.5, 0, Math.PI * 2); ctx.fill();
+    // sparkle
+    const sp = (Math.sin(g.t * 6) + 1) / 2;
+    ctx.fillStyle = `rgba(255,255,255,${0.4 + sp * 0.6})`;
+    ctx.fillRect(cx - 12 + sp * 4, cy - 12, 3, 3); ctx.fillRect(cx + 9, cy + 7 - sp * 6, 2, 2);
+    drawText(label, cx, cy + 26, 7, "center", "#fff", "#543847", 2);
+  }
+
+  // ---------- render ----------
+  function render() {
+    ctx.save();
+    if (g.shake > 0) ctx.translate((Math.random() - 0.5) * 6 * g.shake, (Math.random() - 0.5) * 6 * g.shake);
+    drawBackground();
+    for (const p of g.pipes) drawPipe(p.x, p.top);
+    drawGround();
+    drawBird(BIRD_X, g.birdY, g.birdRot, g.wing);
+    ctx.restore();
+
+    if (g.state === S.READY) {
+      drawScore(0, W / 2, 50);
+      drawText("Get Ready!", W / 2, 130, 22, "center", "#f7f0a6", "#543847", 4);
+      // tap hint: hand + arrow
+      const bob = Math.sin(g.t * 5) * 3;
+      ctx.save(); ctx.translate(W / 2 + 40, 250 + bob);
+      ctx.fillStyle = "#fff"; ctx.strokeStyle = "#543847"; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -26); ctx.lineTo(-8, -14); ctx.moveTo(0, -26); ctx.lineTo(8, -14); ctx.stroke();
+      ctx.beginPath(); ctx.roundRect(-9, 4, 18, 22, 5); ctx.fill(); ctx.stroke();
+      ctx.restore();
+      drawText("TAP", W / 2 + 40, 285, 10, "center", "#fff", "#543847", 3);
+      if (g.best > 0) drawText(`BEST ${g.best}`, W / 2, GROUND_Y + 40, 10, "center", "#fff", "#543847", 3);
+    }
+
+    if (g.state === S.PLAY) drawScore(g.score, W / 2, 50);
+
+    if (g.state === S.DEAD) {
+      if (g.panelT > 0) {
+        const ease = 1 - Math.pow(1 - g.panelT, 3);
+        const py = 400 - 260 * ease;
+        drawText("Game Over", W / 2, py - 60, 22, "center", "#f0552d", "#543847", 4);
+        drawPanel(W / 2 - 113, py, 226, 116);
+        drawMedal(W / 2 - 72, py + 58, g.score);
+        drawText("SCORE", W / 2 + 60, py + 16, 9, "center", "#f0552d", "#543847", 2);
+        drawScore(g.score, W / 2 + 60, py + 28, 20);
+        drawText("BEST", W / 2 + 68, py + 66, 9, "center", "#f0552d", "#543847", 2);
+        drawScore(g.best, W / 2 + 60, py + 78, 20);
+        if (g.newBest) {
+          px(W / 2 + 4, py + 64, 30, 12, "#f0552d");
+          drawText("NEW", W / 2 + 19, py + 66, 7, "center", "#fff", "#f0552d", 1);
+        }
+        if (g.panelT >= 1) {
+          const blink = Math.sin(g.t * 6) > -0.3;
+          if (blink) drawText("TAP TO PLAY AGAIN", W / 2, py + 140, 10, "center", "#fff", "#543847", 3);
+        }
+      }
+      if (g.flash > 0) { ctx.fillStyle = `rgba(255,255,255,${g.flash})`; ctx.fillRect(0, 0, W, H); }
+    }
+  }
+
+  // ---------- loop ----------
+  let last = performance.now();
+  function frame(now) {
+    let dt = (now - last) / 1000; last = now;
+    if (dt > 0.05) dt = 0.05; // tab switch / hiccup: don't teleport the bird
+    update(dt);
+    render();
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  // ---------- input ----------
+  const onTap = (e) => { if (document.getElementById("view-flappy").hidden) return; if (e.cancelable) e.preventDefault(); audio(); flap(); };
+  canvas.addEventListener("pointerdown", onTap);
+  window.addEventListener("keydown", (e) => {
+    if (e.repeat || document.getElementById("view-flappy").hidden) return;
+    if (e.code === "Space" || e.code === "ArrowUp" || e.code === "KeyW") { e.preventDefault(); audio(); flap(); }
+  });
+  window.flap = flap;
+  reset();
+})();
+</script>
+</body>
+</html>
