@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#4ec0ca" />
+  <title>Flappy Bird · Daytona Games</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <style>
+    html, body { margin: 0; height: 100%; background: #000; overflow: hidden; touch-action: none; -webkit-user-select: none; user-select: none; }
+    body { display: flex; align-items: center; justify-content: center; }
+    canvas { display: block; image-rendering: pixelated; image-rendering: crisp-edges; cursor: pointer; }
+    .back { position: fixed; top: 10px; left: 10px; z-index: 5; color: #fff; text-decoration: none; font: 600 13px -apple-system, system-ui, sans-serif; background: rgba(0,0,0,0.45); padding: 7px 11px; border-radius: 99px; backdrop-filter: blur(6px); }
+    .back:hover { background: rgba(0,0,0,0.65); }
+  </style>
+</head>
+<body>
+  <a class="back" href="../../index.html">← Games</a>
+  <canvas id="game" width="288" height="512"></canvas>
+  <script src="game.js"></script>
+</body>
+</html>

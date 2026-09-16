@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Daytona Games</title>
+  <meta name="theme-color" content="#0b0e13" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%235aa9ff'/%3E%3Ctext x='32' y='44' font-size='36' font-family='sans-serif' font-weight='800' text-anchor='middle' fill='%23071019'%3ED%3C/text%3E%3C/svg%3E" />
+  <style>
+    :root { --bg: #0b0e13; --panel: #12161d; --line: rgba(255,255,255,0.08); --text: #e8eaee; --muted: #8b93a1; --accent: #5aa9ff; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--text); font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
+    body { background: radial-gradient(900px 500px at 50% -10%, rgba(90,169,255,0.18), transparent 70%), var(--bg); }
+    header { max-width: 980px; margin: 0 auto; padding: 56px 24px 20px; text-align: center; }
+    .logo { display: inline-flex; align-items: center; gap: 12px; }
+    .logo .mark { width: 44px; height: 44px; border-radius: 12px; background: var(--accent); color: #071019; display: grid; place-items: center; font-weight: 900; font-size: 24px; letter-spacing: -0.04em; }
+    h1 { margin: 0; font-size: 40px; letter-spacing: -0.03em; }
+    .tag { margin: 8px 0 0; color: var(--muted); }
+    main { max-width: 980px; margin: 0 auto; padding: 16px 24px 80px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+    .card { display: flex; flex-direction: column; background: var(--panel); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; text-decoration: none; color: inherit; transition: transform 0.15s ease, border-color 0.15s ease; }
+    .card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.2); }
+    .art { height: 170px; display: grid; place-items: center; position: relative; overflow: hidden; }
+    .body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    .body h2 { margin: 0; font-size: 20px; letter-spacing: -0.01em; }
+    .body p { margin: 0; color: var(--muted); font-size: 14px; }
+    .play { margin-top: auto; padding-top: 12px; color: var(--accent); font-weight: 700; font-size: 14px; }
+    /* flappy art */
+    .art.flappy { background: linear-gradient(#4ec0ca, #70c5ce 70%, #ded895 70%, #ded895); }
+    .art.flappy .pipe { position: absolute; width: 34px; background: #73bf2e; border: 2px solid #543847; }
+    .art.flappy .bird { width: 36px; height: 26px; background: #f8d548; border: 2px solid #543847; border-radius: 50%; position: relative; transform: rotate(-10deg); animation: bob 1.2s ease-in-out infinite; }
+    .art.flappy .bird::before { content: ""; position: absolute; right: 4px; top: 3px; width: 10px; height: 10px; background: #fff; border: 2px solid #543847; border-radius: 50%; }
+    .art.flappy .bird::after { content: ""; position: absolute; right: -10px; top: 12px; border-left: 12px solid #f0552d; border-top: 5px solid transparent; border-bottom: 5px solid transparent; }
+    @keyframes bob { 0%,100% { transform: translateY(-4px) rotate(-10deg);} 50% { transform: translateY(4px) rotate(4deg);} }
+    /* connections art */
+    .art.connections { background: #1a1d24; }
+    .art.connections .grid { display: grid; grid-template-columns: repeat(4, 44px); gap: 6px; }
+    .art.connections .grid i { display: block; height: 30px; border-radius: 6px; background: #efefe6; }
+    .art.connections .grid i.y { background: #f9df6d; } .art.connections .grid i.g { background: #a0c35a; } .art.connections .grid i.b { background: #b0c4ef; } .art.connections .grid i.p { background: #ba81c5; }
+    footer { text-align: center; color: var(--muted); font-size: 12px; padding: 0 24px 40px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo"><span class="mark">D</span><h1>Daytona Games</h1></div>
+    <p class="tag">Pick a game.</p>
+  </header>
+  <main>
+    <a class="card" href="games/flappy/index.html">
+      <div class="art flappy">
+        <div class="pipe" style="left: 40px; top: 0; height: 60px;"></div>
+        <div class="pipe" style="left: 40px; bottom: 30%; height: 30px;"></div>
+        <div class="pipe" style="right: 60px; top: 0; height: 30px;"></div>
+        <div class="pipe" style="right: 60px; bottom: 30%; height: 60px;"></div>
+        <div class="bird"></div>
+      </div>
+      <div class="body">
+        <h2>Flappy Bird</h2>
+        <p>Tap to flap. Don't hit the pipes. Medals at 10, 20, 30 and 40.</p>
+        <span class="play">Play →</span>
+      </div>
+    </a>
+    <a class="card" href="games/connections/index.html">
+      <div class="art connections">
+        <div class="grid">
+          <i class="y"></i><i class="y"></i><i class="y"></i><i class="y"></i>
+          <i class="g"></i><i class="g"></i><i class="g"></i><i class="g"></i>
+          <i></i><i></i><i></i><i></i>
+          <i></i><i></i><i></i><i></i>
+        </div>
+      </div>
+      <div class="body">
+        <h2>Connections</h2>
+        <p>Sixteen words, four hidden groups. Four mistakes and you're out. A new puzzle every day.</p>
+        <span class="play">Play →</span>
+      </div>
+    </a>
+  </main>
+  <footer>Daytona Games</footer>
+</body>
+</html>

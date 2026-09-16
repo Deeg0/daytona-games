@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>Connections · Daytona Games</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top">
+    <a class="back" href="../../index.html">← Games</a>
+    <div class="title">
+      <h1>Connections</h1>
+      <p id="puzzle-label" class="sub"></p>
+    </div>
+    <button id="btn-help" class="icon" title="How to play">?</button>
+  </header>
+
+  <main>
+    <p class="lede">Create four groups of four!</p>
+
+    <div id="board">
+      <div id="solved"></div>
+      <div id="grid"></div>
+    </div>
+
+    <div class="mistakes">
+      <span>Mistakes Remaining:</span>
+      <span id="dots" class="dots"><i></i><i></i><i></i><i></i></span>
+    </div>
+
+    <div class="actions">
+      <button id="btn-shuffle" class="pill">Shuffle</button>
+      <button id="btn-deselect" class="pill" disabled>Deselect All</button>
+      <button id="btn-submit" class="pill primary" disabled>Submit</button>
+    </div>
+  </main>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- results -->
+  <div id="modal" class="modal hidden">
+    <div class="sheet">
+      <button class="close" data-close>✕</button>
+      <h2 id="result-title">Perfect!</h2>
+      <p id="result-sub" class="sub"></p>
+      <div id="result-grid" class="emoji"></div>
+      <div class="row">
+        <button id="btn-share" class="pill primary">Share</button>
+        <button id="btn-another" class="pill">Another puzzle</button>
+      </div>
+      <p class="tiny">Daily puzzle changes at midnight. "Another puzzle" pulls a random one from the bank.</p>
+    </div>
+  </div>
+
+  <!-- help -->
+  <div id="help" class="modal hidden">
+    <div class="sheet">
+      <button class="close" data-close>✕</button>
+      <h2>How to play</h2>
+      <ul class="rules">
+        <li>Find groups of four items that share something in common.</li>
+        <li>Select four items and tap <b>Submit</b> to check your guess.</li>
+        <li>Find the groups without making four mistakes.</li>
+      </ul>
+      <p class="sub">Category examples: <b>FISH</b> — Bass, Flounder, Salmon, Trout. <b>FIRE ___</b> — Ant, Drill, Island, Opal.</p>
+      <p class="sub">Categories will always be more specific than "5-letter words" or "names". Each puzzle has exactly one solution. Watch out for words that seem to belong to multiple categories.</p>
+      <div class="legend"><i class="y"></i> Straightforward <i class="g"></i> <i class="b"></i> <i class="p"></i> Tricky</div>
+    </div>
+  </div>
+
+  <script src="puzzles.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
