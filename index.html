@@ -28,12 +28,12 @@
     .brand span { background: linear-gradient(90deg, var(--a1), var(--a2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
     .count { color: var(--muted); font-size: 13px; }
 
-    .hero { padding: 48px 0 28px; }
-    .hero h1 { margin: 0; font-size: clamp(44px, 8vw, 84px); line-height: 0.98; letter-spacing: -0.045em; font-weight: 800; }
+    .hero { padding: 72px 0 36px; text-align: center; }
+    .hero h1 { margin: 0; font-size: clamp(46px, 9vw, 92px); line-height: 1; letter-spacing: -0.045em; font-weight: 800; }
     .hero h1 em { font-style: normal; background: linear-gradient(90deg, var(--a1) 0%, var(--a2) 55%, var(--a3) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
     .hero p { margin: 18px 0 0; color: var(--muted); font-size: 18px; max-width: 46ch; }
 
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 16px 0 90px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 16px 0 90px; max-width: 860px; margin: 0 auto; }
     .card {
       position: relative; display: flex; flex-direction: column; text-decoration: none; color: inherit;
       background: var(--panel); border: 1px solid var(--line); border-radius: 26px; overflow: hidden;
@@ -75,19 +75,13 @@
     .connections .board i.sel { background: #5a594e; color: #fff; }
 
     footer { color: var(--muted); font-size: 13px; padding: 0 0 40px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
-    @media (max-width: 520px) { .art { height: 180px; } .hero { padding-top: 28px; } }
+    @media (max-width: 520px) { .art { height: 180px; } .hero { padding: 44px 0 24px; } }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <nav>
-      <div class="brand">Daytona <span>Games</span></div>
-      <div class="count" id="count">2 games</div>
-    </nav>
-
     <section class="hero">
-      <h1>Play <em>something</em><br />right now.</h1>
-      <p>Free browser games. No accounts, no downloads, no ads. Your scores save on your device.</p>
+      <h1>Daytona <em>Games</em></h1>
     </section>
 
     <section class="grid">
@@ -128,7 +122,6 @@
       </a>
     </section>
 
-    <footer><span>Daytona Games</span><span>Made for fun.</span></footer>
   </div>
   <script>
     // Personal stats from the games' own saves (same origin).
